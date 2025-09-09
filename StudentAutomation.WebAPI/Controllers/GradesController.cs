@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Autofac.Core;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using StudentAutomation.Application.DTOs.Grades;
@@ -49,6 +50,12 @@ namespace StudentAutomation.WebAPI.Controllers
         {
             var r = await _svc.GetByIdAsync(id);
             return r.Success ? Ok(r.Data) : NotFound(r.Message);
+        }
+        [HttpGet("grades/average-by-student")]
+        public async Task<IActionResult> AverageByStudent([FromQuery] int studentId, [FromQuery] string? term = null)
+        {
+            var result = await _svc.AverageByStudentAsync(studentId, term);
+            return result.Success ? Ok(result.Data) : BadRequest(result.Message);
         }
     }
 }

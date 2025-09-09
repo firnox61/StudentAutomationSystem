@@ -15,5 +15,6 @@ namespace StudentAutomation.Application.Repositories
         Task<bool> ExistsByCodeAsync(string code, int? excludeId = null);
         Task<bool> IsActiveAsync(int id);
         Task<List<Student>> GetStudentsOfCourseAsync(int courseId);
+        Task<List<Course>> GetByTeacherAsync(int teacherId);
     }
 }

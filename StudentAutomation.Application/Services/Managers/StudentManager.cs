@@ -17,13 +17,15 @@ namespace StudentAutomation.Application.Services.Managers
     {
         private readonly IStudentDal _studentDal;
         private readonly IMapper _mapper;
+        private readonly IUserDal _userDal;
 
-        public StudentManager(IStudentDal studentDal, IMapper mapper)
+        public StudentManager(IStudentDal studentDal, IMapper mapper, IUserDal userDal)
         {
             _studentDal = studentDal;
             _mapper = mapper;
+            _userDal = userDal;
         }
-        [SecuredOperation("Admin,Teacher")]
+       // [SecuredOperation("Admin,Teacher")]
         public async Task<IDataResult<List<StudentListDto>>> GetAllAsync()
         {
             var list = await _studentDal.GetAllWithUserAsync();
@@ -49,8 +51,18 @@ namespace StudentAutomation.Application.Services.Managers
             if (await _studentDal.ExistsByStudentNumberAsync(dto.StudentNumber))
                 return new ErrorResult("Bu öğrenci numarası zaten kayıtlı.");
 
+            // user var mı kontrolü
+            var user = await _userDal.GetAsync(x => x.Id == dto.UserId);
+            if (user is null)
+                return new ErrorResult("Kullanıcı bulunamadı.");
+
+            // EF katmanına delege edilen kontrol
+            if (await _userDal.HasAnyClaimAsync(dto.UserId))
+                return new ErrorResult("Bu kullanıcıya zaten kullanıcı atanmış. Öğrenci eklenemez.");
+
             var entity = _mapper.Map<Student>(dto);
             await _studentDal.AddAsync(entity);
+
             return new SuccessResult("Öğrenci eklendi.");
         }
 

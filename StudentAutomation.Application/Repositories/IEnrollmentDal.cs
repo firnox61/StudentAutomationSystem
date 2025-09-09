@@ -1,4 +1,5 @@
-﻿using StudentAutomation.Domain.Entities;
+﻿using StudentAutomation.Application.DTOs.Students;
+using StudentAutomation.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,9 @@ namespace StudentAutomation.Application.Repositories
     {
         Task<Enrollment?> GetAsync(int studentId, int courseId);
         Task<List<Course>> GetCoursesOfStudentAsync(int studentId);
-        Task<List<Student>> GetStudentsOfCourseAsync(int courseId);
+
+        // yeni, projection döner
+        Task<List<StudentMiniDto>> GetStudentMinisOfCourseAsync(int courseId);
+
     }
 }

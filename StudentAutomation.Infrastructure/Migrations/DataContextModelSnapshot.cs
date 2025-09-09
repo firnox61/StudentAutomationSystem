@@ -303,6 +303,56 @@ namespace StudentAutomation.Infrastructure.Migrations
                     b.ToTable("Students", (string)null);
                 });
 
+            modelBuilder.Entity("StudentAutomation.Domain.Entities.StudentFeedback", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasMaxLength(2000)
+                        .HasColumnType("character varying(2000)")
+                        .HasColumnName("comment");
+
+                    b.Property<int>("CourseId")
+                        .HasColumnType("integer")
+                        .HasColumnName("course_id");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<int>("StudentId")
+                        .HasColumnType("integer")
+                        .HasColumnName("student_id");
+
+                    b.Property<int>("TeacherId")
+                        .HasColumnType("integer")
+                        .HasColumnName("teacher_id");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated_at");
+
+                    b.HasKey("Id")
+                        .HasName("pk_student_feedbacks");
+
+                    b.HasIndex("StudentId")
+                        .HasDatabaseName("ix_student_feedbacks_student_id");
+
+                    b.HasIndex("TeacherId")
+                        .HasDatabaseName("ix_student_feedbacks_teacher_id");
+
+                    b.HasIndex("CourseId", "StudentId")
+                        .HasDatabaseName("ix_student_feedbacks_course_id_student_id");
+
+                    b.ToTable("StudentFeedbacks", (string)null);
+                });
+
             modelBuilder.Entity("StudentAutomation.Domain.Entities.Teacher", b =>
                 {
                     b.Property<int>("Id")
@@ -511,6 +561,36 @@ namespace StudentAutomation.Infrastructure.Migrations
                         .HasConstraintName("fk_students_users_user_id");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("StudentAutomation.Domain.Entities.StudentFeedback", b =>
+                {
+                    b.HasOne("StudentAutomation.Domain.Entities.Course", "Course")
+                        .WithMany()
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_student_feedbacks_courses_course_id");
+
+                    b.HasOne("StudentAutomation.Domain.Entities.Student", "Student")
+                        .WithMany()
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_student_feedbacks_students_student_id");
+
+                    b.HasOne("StudentAutomation.Domain.Entities.Teacher", "Teacher")
+                        .WithMany()
+                        .HasForeignKey("TeacherId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_student_feedbacks_teachers_teacher_id");
+
+                    b.Navigation("Course");
+
+                    b.Navigation("Student");
+
+                    b.Navigation("Teacher");
                 });
 
             modelBuilder.Entity("StudentAutomation.Domain.Entities.Teacher", b =>

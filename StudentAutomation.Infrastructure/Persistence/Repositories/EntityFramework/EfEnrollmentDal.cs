@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using StudentAutomation.Application.DTOs.Students;
 using StudentAutomation.Application.Repositories;
 using StudentAutomation.Domain.Entities;
 using StudentAutomation.Infrastructure.Persistence.Context;
@@ -17,18 +18,26 @@ namespace StudentAutomation.Infrastructure.Persistence.Repositories.EntityFramew
         public Task<Enrollment?> GetAsync(int studentId, int courseId) =>
             _context.Enrollments.FirstOrDefaultAsync(e => e.StudentId == studentId && e.CourseId == courseId);
 
-        public async Task<List<Course>> GetCoursesOfStudentAsync(int studentId) =>
-            await _context.Enrollments.AsNoTracking()
+        public Task<List<Course>> GetCoursesOfStudentAsync(int studentId) =>
+            _context.Enrollments
+                .AsNoTracking()
                 .Where(e => e.StudentId == studentId)
-                .Include(e => e.Course)
                 .Select(e => e.Course)
+                .Distinct()
+                .OrderBy(c => c.Name)
                 .ToListAsync();
 
-        public async Task<List<Student>> GetStudentsOfCourseAsync(int courseId) =>
-            await _context.Enrollments.AsNoTracking()
+        public Task<List<StudentMiniDto>> GetStudentMinisOfCourseAsync(int courseId) =>
+            _context.Enrollments
+                .AsNoTracking()
                 .Where(e => e.CourseId == courseId)
-                .Include(e => e.Student).ThenInclude(s => s.User)
-                .Select(e => e.Student)
+                .Select(e => new StudentMiniDto
+                {
+                    Id = e.Student.Id,
+                    StudentNumber = e.Student.StudentNumber,
+                    FullName = e.Student.User.FirstName + " " + e.Student.User.LastName
+                })
+                .OrderBy(s => s.FullName)
                 .ToListAsync();
     }
 }

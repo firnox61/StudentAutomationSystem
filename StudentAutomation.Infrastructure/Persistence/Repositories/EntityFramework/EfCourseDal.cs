@@ -49,5 +49,16 @@ namespace StudentAutomation.Infrastructure.Persistence.Repositories.EntityFramew
                 .Include(e => e.Student).ThenInclude(s => s.User)
                 .Select(e => e.Student)
                 .ToListAsync();
+
+        public async Task<List<Course>> GetByTeacherAsync(int teacherId)
+        {
+            return await _context.Courses
+                .AsNoTracking()
+                .Include(c => c.Teacher).ThenInclude(t => t.User)
+                .Include(c => c.Enrollments)
+                .Where(c => c.TeacherId == teacherId)
+                .OrderBy(c => c.Code)
+                .ToListAsync();
+        }
     }
 }

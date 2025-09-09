@@ -37,5 +37,38 @@ namespace StudentAutomation.Infrastructure.Persistence.Repositories.EntityFramew
                 .Where(g => g.CourseId == courseId)
                 .Include(g => g.Student).ThenInclude(s => s.User)
                 .ToListAsync();
+        public Task<List<Grade>> GetByStudentAsync(int studentId, string? term = null, int? courseId = null)
+        {
+            var q = _context.Grades
+                .AsNoTracking()
+                .Include(g => g.Course)
+                .Include(g => g.Student).ThenInclude(s => s.User)
+                .Where(g => g.StudentId == studentId);
+
+            if (!string.IsNullOrWhiteSpace(term))
+                q = q.Where(g => g.Term == term);
+
+            if (courseId.HasValue)
+                q = q.Where(g => g.CourseId == courseId.Value);
+
+            return q.ToListAsync();
+        }
+
+        public Task<List<Grade>> GetByCourseAsync(int courseId, string? term = null, int? studentId = null)
+        {
+            var q = _context.Grades
+                .AsNoTracking()
+                .Include(g => g.Course)
+                .Include(g => g.Student).ThenInclude(s => s.User)
+                .Where(g => g.CourseId == courseId);
+
+            if (!string.IsNullOrWhiteSpace(term))
+                q = q.Where(g => g.Term == term);
+
+            if (studentId.HasValue)
+                q = q.Where(g => g.StudentId == studentId.Value);
+
+            return q.ToListAsync();
+        }
     }
 }

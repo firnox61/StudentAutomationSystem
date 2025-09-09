@@ -16,11 +16,12 @@ namespace StudentAutomation.Application.Services.Managers
     {
         private readonly ITeacherDal _teacherDal;
         private readonly IMapper _mapper;
-
-        public TeacherManager(ITeacherDal teacherDal, IMapper mapper)
+        private readonly IUserDal _userDal;
+        public TeacherManager(ITeacherDal teacherDal, IMapper mapper, IUserDal userDal)
         {
             _teacherDal = teacherDal;
             _mapper = mapper;
+            _userDal = userDal;
         }
 
         public async Task<IDataResult<List<TeacherListDto>>> GetAllAsync()
@@ -45,8 +46,19 @@ namespace StudentAutomation.Application.Services.Managers
 
         public async Task<IResult> AddAsync(TeacherCreateDto dto)
         {
+            // User var mı kontrolü
+            var user = await _userDal.GetAsync(x => x.Id == dto.UserId);
+            if (user is null)
+                return new ErrorResult("Kullanıcı bulunamadı.");
+
+            // Kullanıcıya rol atanmışsa engelle
+            if (await _userDal.HasAnyClaimAsync(dto.UserId))
+                return new ErrorResult("Bu kullanıcıya zaten rol atanmış. Öğretmen eklenemez.");
+
+            // Haritalama ve ekleme
             var entity = _mapper.Map<Teacher>(dto);
             await _teacherDal.AddAsync(entity);
+
             return new SuccessResult("Öğretmen eklendi.");
         }
 

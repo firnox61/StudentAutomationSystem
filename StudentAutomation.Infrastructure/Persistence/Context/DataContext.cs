@@ -25,6 +25,7 @@ namespace StudentAutomation.Infrastructure.Persistence.Context
         public DbSet<Enrollment> Enrollments => Set<Enrollment>();
         public DbSet<Grade> Grades => Set<Grade>();
         public DbSet<Attendance> Attendances => Set<Attendance>();
+        public DbSet<StudentFeedback> StudentFeedbacks => Set<StudentFeedback>();
         public DbSet<AuditLog> AuditLogs => Set<AuditLog>();
 
         // Global Query Filter içinde erişeceğimiz property
@@ -49,7 +50,9 @@ namespace StudentAutomation.Infrastructure.Persistence.Context
                 modelBuilder.Entity<Enrollment>().ToTable("Enrollments");
                 modelBuilder.Entity<Grade>().ToTable("Grades");
                 modelBuilder.Entity<Attendance>().ToTable("Attendances");
-                modelBuilder.Entity<AuditLog>().ToTable("AuditLogs");
+            modelBuilder.Entity<StudentFeedback>().ToTable("StudentFeedbacks");
+
+            modelBuilder.Entity<AuditLog>().ToTable("AuditLogs");
 
                 // =========================
                 // USER / CLAIMS
@@ -238,17 +241,27 @@ namespace StudentAutomation.Infrastructure.Persistence.Context
                     // e.Property(x => x.Action).HasMaxLength(64);
                     // e.HasIndex(x => x.CreatedAt);
                 });
-            }
+            modelBuilder.Entity<StudentFeedback>(e =>
+            {
+                e.HasKey(x => x.Id);
+                e.Property(x => x.Comment).HasMaxLength(2000).IsRequired();
+                e.Property(x => x.CreatedAt).HasColumnType("timestamp with time zone");
+                e.Property(x => x.UpdatedAt).HasColumnType("timestamp with time zone");
+
+                e.HasOne(x => x.Course).WithMany().HasForeignKey(x => x.CourseId).OnDelete(DeleteBehavior.Cascade);
+                e.HasOne(x => x.Student).WithMany().HasForeignKey(x => x.StudentId).OnDelete(DeleteBehavior.Cascade);
+                e.HasOne(x => x.Teacher).WithMany().HasForeignKey(x => x.TeacherId).OnDelete(DeleteBehavior.Restrict);
+
+                // Sık aranan kombinasyonlar için index
+                e.HasIndex(x => new { x.CourseId, x.StudentId });
+                e.HasIndex(x => new { x.StudentId });
+                e.HasIndex(x => new { x.TeacherId });
+            });
+        }
         }
    }
 
-//Add-Migration InitialCreate -StartupProject UstaTakip.Web -Project UstaTakip.Infrastructure
-//Add-Migration InitialCreate -StartupProject StudentAutomation.WebAPI -Project StudentAutomation.Infrastructure
-
-
-//Update-Database -StartupProject StudentAutomation.WebAPI -Project StudentAutomation.Infrastructure
-
-//Add-Migration InitialCreate
-
+//dotnet ef migrations add InitialCreate -p StudentAutomation.Infrastructure -s StudentAutomation.WebAPI
+//dotnet ef database update -p StudentAutomation.Infrastructure -s StudentAutomation.WebAPI
 //update-database "InitialCreate"
 //tree /f /a > project-structure.txt

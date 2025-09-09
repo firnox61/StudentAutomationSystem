@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using EFCore.NamingConventions;  // <-- BU gerekli
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -10,12 +11,17 @@ using StudentAutomation.Infrastructure.Security.Encryption;
 using StudentAutomation.Infrastructure.Security.Jwt;
 using StudentAutomation.WebAPI.DependencyInjection;
 using System.Security.Claims;
-using EFCore.NamingConventions;  // <-- BU gerekli
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Controllers
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(opts =>
+    {
+        opts.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    });
+
 
 // Swagger (Swashbuckle)
 builder.Services.AddEndpointsApiExplorer();

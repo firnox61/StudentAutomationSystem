@@ -8,7 +8,7 @@ namespace StudentAutomation.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Admin,Teacher")]
+   // [Authorize(Roles = "Admin,Teacher")]
     public class EnrollmentsController : ControllerBase
     {
         private readonly IEnrollmentService _svc;

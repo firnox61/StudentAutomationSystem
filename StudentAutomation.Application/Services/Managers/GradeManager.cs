@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using StudentAutomation.Application.DTOs.Courses;
 using StudentAutomation.Application.DTOs.Grades;
 using StudentAutomation.Application.Interfaces.Services.Contracts;
 using StudentAutomation.Application.Repositories;
@@ -16,11 +17,13 @@ namespace StudentAutomation.Application.Services.Managers
     {
         private readonly IGradeDal _gradeDal;
         private readonly IMapper _mapper;
+        private readonly IStudentDal _studentDal;
 
-        public GradeManager(IGradeDal gradeDal, IMapper mapper)
+        public GradeManager(IGradeDal gradeDal, IMapper mapper, IStudentDal studentDal)
         {
             _gradeDal = gradeDal;
             _mapper = mapper;
+            _studentDal = studentDal;
         }
 
         public async Task<IResult> UpsertAsync(GradeUpsertDto dto)
@@ -66,6 +69,58 @@ namespace StudentAutomation.Application.Services.Managers
             var entity = await _gradeDal.GetByIdDetailAsync(id);
             if (entity == null) return new ErrorDataResult<GradeDetailDto>("Not kaydı bulunamadı.");
             return new SuccessDataResult<GradeDetailDto>(_mapper.Map<GradeDetailDto>(entity));
+        }
+        public async Task<IDataResult<StudentGradeAverageDto>> AverageByStudentAsync(int studentId, string? term = null)
+        {
+            // Öğrenci basic info
+            var student = await _studentDal.GetByIdAsync(studentId);
+            if (student is null) return new ErrorDataResult<StudentGradeAverageDto>("Öğrenci bulunamadı.");
+
+            var grades = await _gradeDal.GetByStudentAsync(studentId, term);
+
+            // Ders bazında grupla
+            var perCourse = grades
+                .GroupBy(g => new { g.CourseId, g.Course.Code, g.Course.Name })
+                .Select(g =>
+                {
+                    decimal? mid = g.FirstOrDefault(x => x.Type == GradeType.Midterm)?.Value;
+                    decimal? fin = g.FirstOrDefault(x => x.Type == GradeType.Final)?.Value;
+                    decimal? mk = g.FirstOrDefault(x => x.Type == GradeType.Makeup)?.Value;
+
+                    // Makeup varsa final yerine geçer
+                    var finalEff = mk ?? fin;
+
+                    // Eksik not varsa 0 kabul (istersen parametreleştiririz)
+                    var midEff = mid ?? 0m;
+                    var finEff = finalEff ?? 0m;
+
+                    var weighted = midEff * 0.40m + finEff * 0.60m;
+
+                    return new CourseBreakdownDto
+                    {
+                        CourseId = g.Key.CourseId,
+                        Code = g.Key.Code,
+                        Name = g.Key.Name,
+                        Midterm = mid,
+                        Final = fin,
+                        Makeup = mk,
+                        Weighted = Math.Round(weighted, 2)
+                    };
+                })
+                .ToList();
+
+            var avg = perCourse.Any() ? Math.Round(perCourse.Average(x => x.Weighted), 2) : 0m;
+
+            var dto = new StudentGradeAverageDto
+            {
+                StudentId = studentId,
+                StudentFullName = student.User.FirstName + " " + student.User.LastName,
+                Term = term,
+                Average = avg,
+                Courses = perCourse
+            };
+
+            return new SuccessDataResult<StudentGradeAverageDto>(dto);
         }
     }
 }

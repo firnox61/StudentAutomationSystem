@@ -23,9 +23,10 @@ namespace StudentAutomation.Infrastructure.Persistence.Repositories.EntityFramew
             _context.Students.FirstOrDefaultAsync(s => s.Id == id);
 
         public Task<Student?> GetByIdWithUserAsync(int id) =>
-            _context.Students.AsNoTracking()
-                .Include(s => s.User)
-                .FirstOrDefaultAsync(s => s.Id == id);
+        _context.Students
+            .AsNoTracking()
+            .Include(s => s.User)
+            .FirstOrDefaultAsync(s => s.Id == id);
 
         public Task<Student?> GetByUserIdWithUserAsync(int userId) =>
             _context.Students.AsNoTracking()

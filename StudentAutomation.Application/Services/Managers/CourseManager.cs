@@ -16,11 +16,13 @@ namespace StudentAutomation.Application.Services.Managers
     public class CourseManager : ICourseService
     {
         private readonly ICourseDal _courseDal;
+        private readonly ITeacherDal _teacherDal;
         private readonly IMapper _mapper;
 
-        public CourseManager(ICourseDal courseDal, IMapper mapper)
+        public CourseManager(ICourseDal courseDal, ITeacherDal teacherDal, IMapper mapper)
         {
             _courseDal = courseDal;
+            _teacherDal = teacherDal;
             _mapper = mapper;
         }
 
@@ -90,6 +92,23 @@ namespace StudentAutomation.Application.Services.Managers
         {
             var students = await _courseDal.GetStudentsOfCourseAsync(courseId);
             return new SuccessDataResult<List<StudentMiniDto>>(_mapper.Map<List<StudentMiniDto>>(students));
+        }
+        public async Task<IDataResult<List<CourseListDto>>> GetByTeacherAsync(int teacherId)
+        {
+            var list = await _courseDal.GetByTeacherAsync(teacherId);
+            var dto = _mapper.Map<List<CourseListDto>>(list);
+            return new SuccessDataResult<List<CourseListDto>>(dto);
+        }
+
+        public async Task<IDataResult<List<CourseListDto>>> GetMineAsync(int userId)
+        {
+            var teacher = await _teacherDal.GetAsync(t => t.UserId == userId);
+            if (teacher is null)
+                return new ErrorDataResult<List<CourseListDto>>("Teacher not found for current user.");
+
+            var list = await _courseDal.GetByTeacherAsync(teacher.Id);
+            var dto = _mapper.Map<List<CourseListDto>>(list);
+            return new SuccessDataResult<List<CourseListDto>>(dto);
         }
     }
 }

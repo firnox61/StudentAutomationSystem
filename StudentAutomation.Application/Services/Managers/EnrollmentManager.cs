@@ -30,8 +30,9 @@ namespace StudentAutomation.Application.Services.Managers
             var student = await _studentDal.GetByIdAsync(studentId);
             if (student == null) return new ErrorResult("Öğrenci bulunamadı.");
 
-            if (!await _courseDal.IsActiveAsync(courseId))
-                return new ErrorResult("Aktif ders bulunamadı.");
+            var course = await _courseDal.GetByIdAsync(courseId);
+            if (course is null) return new ErrorResult("Ders bulunamadı.");
+            if (!course.IsActive) return new ErrorResult("Ders aktif değil.");
 
             var exist = await _enrollmentDal.GetAsync(studentId, courseId);
             if (exist != null) return new ErrorResult("Öğrenci zaten bu derse kayıtlı.");
@@ -62,17 +63,13 @@ namespace StudentAutomation.Application.Services.Managers
             return new SuccessDataResult<List<CourseMiniDto>>(minis);
         }
 
+        // PROJECTION DAL'da: NRE ve gereksiz Include maliyeti yok.
         public async Task<IDataResult<List<StudentMiniDto>>> GetStudentsOfCourseAsync(int courseId)
         {
-            var students = await _enrollmentDal.GetStudentsOfCourseAsync(courseId);
-            var minis = students.Select(s => new StudentMiniDto
-            {
-                Id = s.Id,
-                StudentNumber = s.StudentNumber,
-                FullName = s.User.FirstName + " " + s.User.LastName
-            }).ToList();
-
+            var minis = await _enrollmentDal.GetStudentMinisOfCourseAsync(courseId);
             return new SuccessDataResult<List<StudentMiniDto>>(minis);
         }
     }
 }
+    
+

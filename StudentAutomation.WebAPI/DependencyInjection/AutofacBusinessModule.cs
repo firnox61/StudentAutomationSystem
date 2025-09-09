@@ -58,6 +58,8 @@ namespace StudentAutomation.WebAPI.DependencyInjection
           //  builder.RegisterType<AttendanceManager>().As<IAttendanceService>();
             builder.RegisterType<EfAttendanceDal>().As<IAttendanceDal>();
 
+          // builder.RegisterType<StudentFeedbackManager>().As<IStudentFeedbackService>();
+            builder.RegisterType<EfStudentFeedbackDal>().As<IStudentFeedbackDal>();
 
 
             builder.RegisterType<JwtHelper>().As<ITokenHelper>();

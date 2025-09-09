@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using StudentAutomation.Application.DTOs.Attendances;
 using StudentAutomation.Application.DTOs.Courses;
+using StudentAutomation.Application.DTOs.Feedbacks;
 using StudentAutomation.Application.DTOs.Grades;
 using StudentAutomation.Application.DTOs.Students;
 using StudentAutomation.Application.DTOs.Teachers;
@@ -62,12 +63,21 @@ namespace StudentAutomation.Application.MappingProfiles
                 .ForMember(d => d.Email, m => m.MapFrom(s => s.User.Email));
             CreateMap<Teacher, TeacherDetailDto>()
                 .IncludeBase<Teacher, TeacherListDto>();
+            CreateMap<StudentFeedback, StudentFeedbackListDto>()
+               .ForMember(d => d.TeacherFullName,
+                   m => m.MapFrom(s => s.Teacher.User.FirstName + " " + s.Teacher.User.LastName));
 
+            CreateMap<StudentFeedbackCreateDto, StudentFeedback>();
             // Course
             CreateMap<CourseCreateDto, Course>();
             CreateMap<CourseUpdateDto, Course>();
             CreateMap<Course, CourseListDto>()
-                .ForMember(d => d.TeacherName, m => m.MapFrom(c => c.Teacher != null ? (c.Teacher.User.FirstName + " " + c.Teacher.User.LastName) : null));
+                 .ForMember(d => d.TeacherFullName,
+                     m => m.MapFrom(s => s.Teacher != null
+                         ? (s.Teacher.User.FirstName + " " + s.Teacher.User.LastName)
+                         : null))
+                 .ForMember(d => d.EnrollmentCount,
+                     m => m.MapFrom(s => s.Enrollments.Count));
             CreateMap<Course, CourseDetailDto>()
                 .IncludeBase<Course, CourseListDto>()
                 .ForMember(d => d.Students, m => m.MapFrom(c => c.Enrollments.Select(e => e.Student)));

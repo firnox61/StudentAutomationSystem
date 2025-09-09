@@ -19,5 +19,7 @@ namespace StudentAutomation.Application.Interfaces.Services.Contracts
         Task<IResult> AssignTeacherAsync(int courseId, int? teacherId);
         Task<IResult> SetActiveAsync(int courseId, bool isActive);
         Task<IDataResult<List<StudentMiniDto>>> GetStudentsAsync(int courseId);
+        Task<IDataResult<List<CourseListDto>>> GetByTeacherAsync(int teacherId);
+        Task<IDataResult<List<CourseListDto>>> GetMineAsync(int userId);
     }
 }

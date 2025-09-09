@@ -9,6 +9,7 @@ namespace StudentAutomation.Application.Repositories
 {
     public interface IStudentDal : IEntityRepository<Student>
     {
+
         Task<List<Student>> GetAllWithUserAsync();
         Task<Student?> GetByIdAsync(int id);                  // no include
         Task<Student?> GetByIdWithUserAsync(int id);

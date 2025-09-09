@@ -240,6 +240,42 @@ namespace StudentAutomation.Infrastructure.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "StudentFeedbacks",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    course_id = table.Column<int>(type: "integer", nullable: false),
+                    student_id = table.Column<int>(type: "integer", nullable: false),
+                    teacher_id = table.Column<int>(type: "integer", nullable: false),
+                    comment = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false),
+                    created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_student_feedbacks", x => x.id);
+                    table.ForeignKey(
+                        name: "fk_student_feedbacks_courses_course_id",
+                        column: x => x.course_id,
+                        principalTable: "Courses",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "fk_student_feedbacks_students_student_id",
+                        column: x => x.student_id,
+                        principalTable: "Students",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "fk_student_feedbacks_teachers_teacher_id",
+                        column: x => x.teacher_id,
+                        principalTable: "Teachers",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "ix_attendances_course_id",
                 table: "Attendances",
@@ -283,6 +319,21 @@ namespace StudentAutomation.Infrastructure.Migrations
                 table: "OperationClaims",
                 column: "name",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "ix_student_feedbacks_course_id_student_id",
+                table: "StudentFeedbacks",
+                columns: new[] { "course_id", "student_id" });
+
+            migrationBuilder.CreateIndex(
+                name: "ix_student_feedbacks_student_id",
+                table: "StudentFeedbacks",
+                column: "student_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_student_feedbacks_teacher_id",
+                table: "StudentFeedbacks",
+                column: "teacher_id");
 
             migrationBuilder.CreateIndex(
                 name: "ix_students_student_number",
@@ -332,6 +383,9 @@ namespace StudentAutomation.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "Grades");
+
+            migrationBuilder.DropTable(
+                name: "StudentFeedbacks");
 
             migrationBuilder.DropTable(
                 name: "UserOperationClaims");

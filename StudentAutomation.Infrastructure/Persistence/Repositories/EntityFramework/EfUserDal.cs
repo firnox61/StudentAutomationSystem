@@ -21,5 +21,12 @@ namespace StudentAutomation.Infrastructure.Persistence.Repositories.EntityFramew
 
             return claims;
         }
+        public async Task<bool> HasAnyClaimAsync(int userId)
+        {
+            // UserOperationClaims tablosunu doğrudan sorgulamak en hızlısı
+            return await _context.UserOperationClaims
+                                 .AsNoTracking()
+                                 .AnyAsync(uoc => uoc.UserId == userId);
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using StudentAutomation.Application.DTOs.Grades;
+﻿using StudentAutomation.Application.DTOs.Courses;
+using StudentAutomation.Application.DTOs.Grades;
 using StudentAutomation.Core.Utilities.Results;
 using System;
 using System.Collections.Generic;
@@ -15,5 +16,6 @@ namespace StudentAutomation.Application.Interfaces.Services.Contracts
         Task<IDataResult<List<GradeListDto>>> GetByStudentAsync(int studentId, int? courseId = null);
         Task<IDataResult<List<GradeListDto>>> GetByCourseAsync(int courseId);
         Task<IDataResult<GradeDetailDto>> GetByIdAsync(int id);
+        Task<IDataResult<StudentGradeAverageDto>> AverageByStudentAsync(int studentId, string? term = null);
     }
 }
