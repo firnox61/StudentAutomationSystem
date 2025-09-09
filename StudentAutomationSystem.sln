@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudentAutomation.Core", "S
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudentAutomation.WebAPI", "StudentAutomation.WebAPI\StudentAutomation.WebAPI.csproj", "{45D47946-7DC6-4ED6-9F61-6F38116BD38F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudentAutomation.Tests.Unit", "StudentAutomation.Tests.Unit\StudentAutomation.Tests.Unit.csproj", "{24F2E34C-26E7-92A4-5267-DF6F0CCD1971}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{45D47946-7DC6-4ED6-9F61-6F38116BD38F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{45D47946-7DC6-4ED6-9F61-6F38116BD38F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{45D47946-7DC6-4ED6-9F61-6F38116BD38F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24F2E34C-26E7-92A4-5267-DF6F0CCD1971}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24F2E34C-26E7-92A4-5267-DF6F0CCD1971}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24F2E34C-26E7-92A4-5267-DF6F0CCD1971}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24F2E34C-26E7-92A4-5267-DF6F0CCD1971}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
