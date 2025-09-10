@@ -1,0 +1,66 @@
+﻿@page "/students"
+@using StudentAutomation.Blazor.Models
+@using StudentAutomation.Blazor.Services
+@inject IApiClient Api
+
+<h3>Öğrenciler</h3>
+
+@if (_loading)
+{
+    <p>Yükleniyor...</p>
+}
+else if (!string.IsNullOrWhiteSpace(_error))
+{
+    <div class="alert alert-danger">@_error</div>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Ad Soyad</th>
+                <th>Email</th>
+                <th>Bölüm</th>
+                <th>Durum</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var s in _data)
+            {
+                <tr>
+                    <td>@s.StudentNumber</td>
+                    <td>@s.FirstName @s.LastName</td>
+                    <td>@s.Email</td>
+                    <td>@s.Department</td>
+                    <td>@(s.Status ? "Aktif" : "Pasif")</td>
+                    <td><a href="@($"/students/{s.Id}")">Detay</a></td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private bool _loading = true;
+    private string? _error;
+    private IReadOnlyList<StudentListDto> _data = Array.Empty<StudentListDto>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            _data = await Api.GetStudentsAsync();
+        }
+        catch (Exception ex)
+        {
+            _error = ex.Message;
+        }
+        finally
+        {
+            _loading = false;
+        }
+    }
+}

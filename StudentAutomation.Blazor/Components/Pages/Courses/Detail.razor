@@ -1,0 +1,67 @@
+﻿@page "/courses/{id:int}"
+@using StudentAutomation.Blazor.Models
+@using StudentAutomation.Blazor.Services
+@inject IApiClient Api
+
+<h3>Ders Detayı</h3>
+
+@if (loading)
+{
+    <p>Yükleniyor…</p>
+}
+else if (!string.IsNullOrWhiteSpace(error))
+{
+
+    <div class="alert alert-danger">@error</div>
+}
+else if (course is null)
+{
+
+    <p>Kayıt bulunamadı.</p>
+}
+else
+{
+    <div class="border rounded p-3 mb-3">
+        <div><b>Kod:</b> @course.Code</div>
+        <div><b>Ad:</b> @course.Name</div>
+        <div><b>Öğretmen:</b> @(string.IsNullOrWhiteSpace(course.TeacherFullName) ? "-" : course.TeacherFullName)</div>
+        <div><b>Aktif:</b> @(course.IsActive ? "Evet" : "Hayır")</div>
+        <div><b>Kayıtlı Öğrenci:</b> @course.EnrollmentCount</div>
+    </div>
+
+    @if (course.Students?.Count > 0)
+    {
+        <h5>Öğrenciler</h5>
+        <table class="table table-sm">
+            <thead>
+                <tr><th>Id</th><th>No</th><th>Ad Soyad</th></tr>
+            </thead>
+            <tbody>
+                @foreach (var s in course.Students)
+                {
+                    <tr>
+                        <td>@s.Id</td>
+                        <td>@s.StudentNumber</td>
+                        <td>@s.FullName</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+}
+
+@code {
+    [Parameter] public int id { get; set; }
+
+    private bool loading = true;
+    private string? error;
+    private CourseDetailDto? course;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        loading = true; error = null;
+        try { course = await Api.GetCourseAsync(id); }
+        catch (Exception ex) { error = ex.Message; }
+        finally { loading = false; }
+    }
+}

@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudentAutomation.WebAPI", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudentAutomation.Tests.Unit", "StudentAutomation.Tests.Unit\StudentAutomation.Tests.Unit.csproj", "{24F2E34C-26E7-92A4-5267-DF6F0CCD1971}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudentAutomation.Blazor", "StudentAutomation.Blazor\StudentAutomation.Blazor.csproj", "{587A9E7A-3174-B317-420D-78DED6D8F1C9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{24F2E34C-26E7-92A4-5267-DF6F0CCD1971}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{24F2E34C-26E7-92A4-5267-DF6F0CCD1971}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{24F2E34C-26E7-92A4-5267-DF6F0CCD1971}.Release|Any CPU.Build.0 = Release|Any CPU
+		{587A9E7A-3174-B317-420D-78DED6D8F1C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{587A9E7A-3174-B317-420D-78DED6D8F1C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{587A9E7A-3174-B317-420D-78DED6D8F1C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{587A9E7A-3174-B317-420D-78DED6D8F1C9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

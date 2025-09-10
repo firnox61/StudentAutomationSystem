@@ -1,24 +1,22 @@
 ﻿using Castle.DynamicProxy;
 using StudentAutomation.Core.Aspects.Interceptors;
 using System.Diagnostics;
-
+using Serilog;
 namespace StudentAutomation.Core.Aspects.Performance
 {
     public class PerformanceAspect : MethodInterception
     {
         private readonly int _interval;
-        private Stopwatch _stopwatch;
+        private readonly Stopwatch _stopwatch = new();
 
-        public PerformanceAspect(int interval = 3) // default 3 saniye
+        public PerformanceAspect(int interval = 3) // default 3s
         {
             _interval = interval;
-            _stopwatch = new Stopwatch();
         }
 
         protected override void OnBefore(IInvocation invocation)
         {
-            _stopwatch.Reset();
-            _stopwatch.Start();
+            _stopwatch.Restart();
         }
 
         protected override void OnAfter(IInvocation invocation)
@@ -26,24 +24,10 @@ namespace StudentAutomation.Core.Aspects.Performance
             _stopwatch.Stop();
             if (_stopwatch.Elapsed.TotalSeconds > _interval)
             {
-                var method = $"{invocation.Method.DeclaringType.FullName}.{invocation.Method.Name}";
-                var message = $"PERFORMANCE WARNING: {method} took {_stopwatch.Elapsed.TotalSeconds:F2} seconds.";
-                File.AppendAllText("logs/performance.txt", $"{DateTime.Now:HH:mm:ss} - {message}{Environment.NewLine}");
+                var method = $"{invocation.Method.DeclaringType!.FullName}.{invocation.Method.Name}";
+                Log.Warning("PERFORMANCE WARNING: {Method} took {Seconds:F2} seconds.",
+                            method, _stopwatch.Elapsed.TotalSeconds);
             }
-
-
-            /*_stopwatch.Stop();
-    var method = $"{invocation.Method.DeclaringType.FullName}.{invocation.Method.Name}";
-    var duration = _stopwatch.Elapsed.TotalSeconds;
-
-    var logDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "logs");
-    if (!Directory.Exists(logDir))
-        Directory.CreateDirectory(logDir);
-
-    var logPath = Path.Combine(logDir, "performance.txt");
-
-    File.AppendAllText(logPath, $"{DateTime.Now:HH:mm:ss} - {method} completed in {duration:F4} seconds.{Environment.NewLine}");*/
-            //herzaman çalışşsın istersek
         }
     }
 }

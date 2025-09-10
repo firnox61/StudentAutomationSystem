@@ -6,8 +6,5 @@ using System.Threading.Tasks;
 
 namespace StudentAutomation.Application.DTOs.Students
 {
-    public class StudentUpdateDto : StudentCreateDto
-    {
-        public int Id { get; set; }
-    }
+   
 }

@@ -12,8 +12,27 @@ using StudentAutomation.Infrastructure.Security.Jwt;
 using StudentAutomation.WebAPI.DependencyInjection;
 using System.Security.Claims;
 using System.Text.Json.Serialization;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+
+
+
+
+Log.Logger = new LoggerConfiguration()
+    .Enrich.FromLogContext()
+    .WriteTo.Console()
+    .WriteTo.File(
+        path: Path.Combine(AppContext.BaseDirectory, "logs", "log-.txt"),
+        rollingInterval: RollingInterval.Day,
+        shared: true,                 // <<< çok kritik: paylaşımlı erişim
+        retainedFileCountLimit: 10,
+        flushToDiskInterval: TimeSpan.FromSeconds(1))
+    .CreateLogger();
+
+builder.Host.UseSerilog();
+
 
 // Controllers
 builder.Services.AddControllers()
@@ -27,8 +46,20 @@ builder.Services.AddControllers()
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<DataContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
-           .UseSnakeCaseNamingConvention()); // opsiyonel
+{
+    options.UseNpgsql(
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        npg =>
+        {
+            npg.EnableRetryOnFailure(
+                maxRetryCount: 5,                // en fazla 5 kez dene
+                maxRetryDelay: TimeSpan.FromSeconds(5),
+                errorCodesToAdd: null);
+        })
+        .UseSnakeCaseNamingConvention(); // opsiyonel
+    // options.CommandTimeout(30); // istersen buradan sorgu timeout'u da ayarlayabilirsin
+});
+
 // AutoMapper
 builder.Services.AddAutoMapper(typeof(GeneralMapping).Assembly);
 

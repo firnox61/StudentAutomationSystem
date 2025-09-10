@@ -1,0 +1,47 @@
+﻿@page "/teachers/{id:int}"
+@using StudentAutomation.Blazor.Models
+@using StudentAutomation.Blazor.Services
+@inject IApiClient Api
+
+<h3>Öğretmen Detayı</h3>
+
+@if (loading)
+{
+    <p>Yükleniyor…</p>
+}
+else if (!string.IsNullOrWhiteSpace(error))
+{
+
+    <div class="alert alert-danger">@error</div>
+}
+else if (data is null)
+{
+
+    <p>Kayıt bulunamadı.</p>
+}
+else
+{
+    <div class="border rounded p-3">
+        <div><b>Ad Soyad:</b> @data.FirstName @data.LastName</div>
+        <div><b>Ünvan:</b> @data.Title</div>
+        <div><b>Bölüm:</b> @data.Department</div>
+        <div><b>Email:</b> @data.Email</div>
+        <div><b>Durum:</b> @(data.Status ? "Aktif" : "Pasif")</div>
+    </div>
+}
+
+@code {
+    [Parameter] public int id { get; set; }
+
+    private bool loading = true;
+    private string? error;
+    private TeacherDetailDto? data;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        loading = true; error = null;
+        try { data = await Api.GetTeacherAsync(id); }
+        catch (Exception ex) { error = ex.Message; }
+        finally { loading = false; }
+    }
+}

@@ -1,0 +1,88 @@
+﻿@page "/"
+@using StudentAutomation.Blazor.Services
+@inject IApiClient Api
+
+<h3>Dashboard</h3>
+
+@if (loading)
+{
+    <p>Yükleniyor…</p>
+}
+else if (!string.IsNullOrWhiteSpace(error))
+{
+    <div class="alert alert-danger">@error</div>
+}
+else
+{
+    <div class="row g-3">
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Öğrenciler</h5>
+                    <p class="display-6">@studentCount</p>
+                    <a class="btn btn-sm btn-primary" href="/students">Listeye Git</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Öğretmenler</h5>
+                    <p class="display-6">@teacherCount</p>
+                    <a class="btn btn-sm btn-primary" href="/teachers">Listeye Git</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Dersler</h5>
+                    <p class="display-6">@courseCount</p>
+                    <a class="btn btn-sm btn-primary" href="/courses">Listeye Git</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button class="btn btn-outline-secondary mt-3" @onclick="Refresh">Yenile</button>
+}
+
+@code {
+    private bool loading = true;
+    private string? error;
+    private int studentCount, teacherCount, courseCount;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadAsync();
+    }
+
+    private async Task LoadAsync()
+    {
+        loading = true; error = null;
+        try
+        {
+            var sTask = Api.GetStudentCountAsync();
+            var tTask = Api.GetTeacherCountAsync();
+            var cTask = Api.GetCourseCountAsync();
+
+            await Task.WhenAll(sTask, tTask, cTask);
+
+            studentCount = sTask.Result;
+            teacherCount = tTask.Result;
+            courseCount = cTask.Result;
+        }
+        catch (Exception ex)
+        {
+            error = ex.Message;
+        }
+        finally
+        {
+            loading = false;
+        }
+    }
+
+    private Task Refresh() => LoadAsync();
+}
