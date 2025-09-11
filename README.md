@@ -13,6 +13,65 @@ Modern, ölçeklenebilir bir öğrenci yönetim sistemi. Clean Architecture pren
 - [API Dokümantasyonu](#-api-dokümantasyonu)
 - [Test](#-test)
 - [Katkıda Bulunma](#-katkıda-bulunma)
+# Öğrenci Otomasyon Sistemi – Test ve Web Paneli
+
+Projeyi test edebilmeniz için **hazır test verisi** sağlayamıyoruz çünkü sistemde kullanıcı parolaları **hash** ile saklanmaktadır. Testleri kendi ortamınızda yapmanız gerekmektedir.
+
+## Test Kuralları
+1. Sistemde her kullanıcı **tek bir role** sahiptir: ya **öğrenci** ya da **öğretmen**.
+2. Kullanıcı kaydı yapmak için:
+   - Web panelinde **Kayıt Ol** bölümünden yeni bir kullanıcı oluşturun.
+3. Swagger tarafında oluşturduğunuz kullanıcıya **UserOperationClaims** ile gerekli yetki atamasını yapın.
+4. Claim ataması dışındaki tüm işlemleri **web paneli üzerinden** gerçekleştirebilirsiniz.
+5. API’nin geri kalan işlemleri çoğunlukla **backend tarafında** çalışmaktadır; web tarafında sadece erişebildiğiniz kısımları kullanabilirsiniz.
+
+## Web Paneli Modülleri
+
+### Öğrenciler
+- Öğrenci ekleme
+- Öğrenci detay görüntüleme
+- Öğrenci güncelleme
+- Öğrenci silme
+- Filtreleme ve arama
+
+### Öğretmenler
+- Öğretmen ekleme
+- Öğretmen detay görüntüleme
+- Öğretmen güncelleme
+- Öğretmen silme
+- Filtreleme ve arama
+
+### Kurslar
+- Kurs ekleme
+- Kurs detay görüntüleme
+- Kurs güncelleme
+- Kurs silme
+- Filtreleme ve arama
+
+### Yoklamalar
+- Yoklama ekleme
+- Yoklama detay görüntüleme
+- Yoklama güncelleme
+- Yoklama silme
+- Filtreleme ve arama
+
+### Notlar
+- Not ekleme
+- Not detay görüntüleme
+- Not güncelleme
+- Not silme
+
+### Öğrenci Feedback
+- Feedback ekleme
+- Feedback detay görüntüleme
+- Feedback güncelleme
+- Feedback silme
+- Filtreleme ve arama
+
+### Ders Kayıtları
+- Ders ekleme
+- Ders silme
+- Filtreleme ve arama
 
 ## 🎯 Proje Hakkında
 
@@ -211,6 +270,10 @@ cd StudentAutomation
 }
 
 ```
+**Veritabanını docker üzerinden ayağı kaldırın**
+```bash
+docker run -d --name studentdb -e POSTGRES_DB=studentdb -e POSTGRES_USER=sa -e POSTGRES_PASSWORD=Password123* -p 5432:5432 -v studentdb-data:/var/lib/postgresql/data postgres:15
+```
 
 3. **NuGet paketlerini yükleyin**
 ```bash
@@ -220,7 +283,8 @@ dotnet restore
 4. **Veritabanını oluşturun**
 ```bash
 cd StudentAutomation.Infrastructure
-dotnet ef database update
+dotnet ef migrations add InitialCreate -p StudentAutomation.Infrastructure -s StudentAutomation.WebAPI
+dotnet ef database update -p StudentAutomation.Infrastructure -s StudentAutomation.WebAPI
 ```
 
 5. **Uygulamayı çalıştırın**
@@ -231,64 +295,11 @@ dotnet run
 
 6. **Swagger UI'ya erişin**
 ```
-https://localhost:7001/swagger
+http://localhost:5180/swagger/index.html
 ```
+ **Web tarafına erişin**
+http://localhost:5283/
 
-## 📖 Kullanım
-
-### Authentication
-
-Sisteme erişim için önce authentication endpoint'ini kullanarak token almalısınız:
-
-```bash
-POST /api/auth/login
-{
-  "email": "admin@example.com",
-  "password": "password123"
-}
-```
-
-Dönen token'ı Authorization header'ında kullanın:
-```bash
-Authorization: Bearer {your-jwt-token}
-```
-
-### Temel API Kullanımı
-
-#### Öğrenci Ekleme
-```bash
-POST /api/students
-{
-  "firstName": "Ahmet",
-  "lastName": "Yılmaz",
-  "email": "ahmet.yilmaz@email.com",
-  "phoneNumber": "05551234567",
-  "dateOfBirth": "2000-01-15"
-}
-```
-
-#### Ders Oluşturma  
-```bash
-POST /api/courses
-{
-  "courseName": "Matematik",
-  "courseCode": "MAT101",
-  "credits": 4,
-  "teacherId": 1
-}
-```
-
-#### Not Girişi
-```bash
-POST /api/grades
-{
-  "studentId": 1,
-  "courseId": 1,
-  "midtermGrade": 85.5,
-  "finalGrade": 92.0,
-  "letterGrade": "AA"
-}
-```
 
 ## 📚 API Dokümantasyonu
 
@@ -389,10 +400,10 @@ Bu proje MIT lisansı altında lisanslanmıştır. Detaylar için [LICENSE](LICE
 
 ## 📞 İletişim
 
-- **Geliştirici**: [Your Name]
-- **Email**: [your.email@example.com]
-- **LinkedIn**: [Your LinkedIn Profile]
-- **GitHub**: [Your GitHub Profile]
+- **Geliştirici**: [İsmail Enes Eroğlu]
+- **Email**: [ismaileneseroglu@gmail.com]
+- **LinkedIn**: [https://www.linkedin.com/in/ismail-enes-ero%C4%9Flu-4381a51ba/]
+- **GitHub**: [https://github.com/firnox61]
 
 ---
 
@@ -407,3 +418,5 @@ Bu proje MIT lisansı altında lisanslanmıştır. Detaylar için [LICENSE](LICE
 <img width="1657" height="466" alt="8" src="https://github.com/user-attachments/assets/99b2828d-cd06-4e12-a4dc-144e7646b5f3" />
 <img width="1876" height="701" alt="9" src="https://github.com/user-attachments/assets/b15fb64e-adec-4530-9984-8036b003f6c3" />
 <img width="1903" height="541" alt="10" src="https://github.com/user-attachments/assets/eb9a9b9a-8433-4ac1-87aa-0348a1acc4c7" />
+<img width="915" height="482" alt="11" src="https://github.com/user-attachments/assets/8d993613-bfce-4c75-995f-d2912756e75f" />
+
