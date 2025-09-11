@@ -184,7 +184,7 @@ StudentAutomation/
 
 1. **Repository'yi klonlayın**
 ```bash
-git clone https://github.com/yourusername/StudentAutomation.git
+git clone git@github.com:firnox61/StudentAutomationSystem.git
 cd StudentAutomation
 ```
 
@@ -192,10 +192,24 @@ cd StudentAutomation
 ```json
 // appsettings.json
 {
+  "TokenOptions": {
+    "Audience": "your@email.com",
+    "Issuer": "your@email.com",
+    "AccessTokenExpiration": 10,
+    "SecurityKey": "mysupersecretkeymysupersecretkeymysupersecretkeymysupersecretkeymysupersecretkeymysupersecretkey"
+  },
   "ConnectionStrings": {
-    "DefaultConnection": "Host=localhost;Database=StudentAutomationDB;Username=postgres;Password=yourpassword"
-  }
+    "DefaultConnection": "Host=localhost;Port=5432;Database=studentdb;Username=sa;Password=Password123*"
+  },
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "AllowedHosts": "*"
 }
+
 ```
 
 3. **NuGet paketlerini yükleyin**
