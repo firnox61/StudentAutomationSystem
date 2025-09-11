@@ -16,7 +16,7 @@ namespace StudentAutomation.Domain.Entities
         public int CourseId { get; set; }
         public DateOnly Date { get; set; }              // Npgsql EF Core'da 'date' olarak desteklenir
         public int? Week { get; set; }
-        [JsonStringEnumConverter]
+        //[JsonStringEnumConverter]
         public AttendanceStatus Status { get; set; } = AttendanceStatus.Present;
         public string? Note { get; set; }
 
