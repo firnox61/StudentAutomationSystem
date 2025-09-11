@@ -383,3 +383,4 @@ Bu proje MIT lisansı altında lisanslanmıştır. Detaylar için [LICENSE](LICE
 ---
 
 **Not**: Bu README dosyası projenin mevcut durumunu yansıtmaktadır. Yeni özellikler eklendikçe güncellenmektedir.
+<img width="1912" height="922" alt="1" src="https://github.com/user-attachments/assets/786c5b98-66b1-4766-9878-e0b6000629de" />
