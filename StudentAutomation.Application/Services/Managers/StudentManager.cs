@@ -31,21 +31,21 @@ namespace StudentAutomation.Application.Services.Managers
             var list = await _studentDal.GetAllWithUserAsync();
             return new SuccessDataResult<List<StudentListDto>>(_mapper.Map<List<StudentListDto>>(list));
         }
-
+        [SecuredOperation("Admin,Teacher,Student")]
         public async Task<IDataResult<StudentDetailDto>> GetByIdAsync(int id)
         {
             var entity = await _studentDal.GetByIdWithUserAsync(id);
             if (entity == null) return new ErrorDataResult<StudentDetailDto>("Öğrenci bulunamadı.");
             return new SuccessDataResult<StudentDetailDto>(_mapper.Map<StudentDetailDto>(entity));
         }
-
+        [SecuredOperation("Admin,Teacher,Student")]
         public async Task<IDataResult<StudentDetailDto>> GetByUserIdAsync(int userId)
         {
             var entity = await _studentDal.GetByUserIdWithUserAsync(userId);
             if (entity == null) return new ErrorDataResult<StudentDetailDto>("Öğrenci bulunamadı.");
             return new SuccessDataResult<StudentDetailDto>(_mapper.Map<StudentDetailDto>(entity));
         }
-
+        [SecuredOperation("Admin,Teacher,Student")]
         public async Task<IResult> AddAsync(StudentCreateDto dto)
         {
             if (await _studentDal.ExistsByStudentNumberAsync(dto.StudentNumber))
@@ -65,7 +65,7 @@ namespace StudentAutomation.Application.Services.Managers
 
             return new SuccessResult("Öğrenci eklendi.");
         }
-
+        [SecuredOperation("Admin,Teacher,Student")]
         public async Task<IResult> UpdateAsync(StudentUpdateDto dto)
         {
             var entity = await _studentDal.GetByIdAsync(dto.Id);
@@ -78,7 +78,7 @@ namespace StudentAutomation.Application.Services.Managers
             await _studentDal.UpdateAsync(entity);
             return new SuccessResult("Öğrenci güncellendi.");
         }
-
+        [SecuredOperation("Admin,Teacher,Student")]
         public async Task<IResult> DeleteAsync(int id)
         {
             var entity = await _studentDal.GetByIdAsync(id);
@@ -86,5 +86,19 @@ namespace StudentAutomation.Application.Services.Managers
             await _studentDal.DeleteAsync(entity);
             return new SuccessResult("Öğrenci silindi.");
         }
+
+        public async Task<IDataResult<List<StudentMiniDto>>> GetMinisAsync()
+        {
+            var students = await _studentDal.GetAllWithUserAsync();
+            var minis = students.Select(s => new StudentMiniDto
+            {
+                Id = s.Id,
+                StudentNumber = s.StudentNumber,
+                FullName = s.User.FirstName + " " + s.User.LastName
+            }).ToList();
+
+            return new SuccessDataResult<List<StudentMiniDto>>(minis);
+        }
+
     }
 }

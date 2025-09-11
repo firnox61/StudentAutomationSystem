@@ -271,6 +271,32 @@ namespace StudentAutomation.Infrastructure.Persistence.Context
                 e.HasIndex(x => new { x.StudentId });
                 e.HasIndex(x => new { x.TeacherId });
             });
+          /*  modelBuilder.Entity<OperationClaim>().HasData(
+       new OperationClaim { Id = 1, Name = "Admin" },
+       new OperationClaim { Id = 2, Name = "Teacher" },
+       new OperationClaim { Id = 3, Name = "Student" }
+   );
+
+            modelBuilder.Entity<User>().HasData(
+                new User
+                {
+                    Id = 1,
+                    FirstName = "Deneme",
+                    LastName = "Deneme",
+                    Email = "deneme@gmail.com",
+                    PasswordHash = Convert.FromBase64String("gzpOoqpwh9gUnQU9s8r+8d82wvzOKFOpZByUwDCuk4lM/dn+iNzQbA4isBdS5EpyJ3xeYXN6ox3O7VsJlXLH5w=="),
+                    PasswordSalt = Convert.FromBase64String("qYkF9cEJg27h4Egf13rRxZcASZgeL7MEJW1pOnLepmo4lm1N1q+W5MtnMSRDrBaqm6FIKmlMybbzA2xnDKwC1A=="),
+                    Status = true
+                }
+
+    );
+
+            modelBuilder.Entity<UserOperationClaim>().HasData(
+                new UserOperationClaim { Id = 1, UserId = 1, OperationClaimId = 1 },
+                new UserOperationClaim { Id = 2, UserId = 1, OperationClaimId = 2 },
+                new UserOperationClaim { Id = 3, UserId = 1, OperationClaimId = 3 }
+                
+            );*/
         }
         }
    }
@@ -279,3 +305,4 @@ namespace StudentAutomation.Infrastructure.Persistence.Context
 //dotnet ef database update -p StudentAutomation.Infrastructure -s StudentAutomation.WebAPI
 //update-database "InitialCreate"
 //tree /f /a > project-structure.txt
+//dotnet ef migrations add InitialCreate -p StudentAutomation.Infrastructure -s StudentAutomation.WebAPI

@@ -16,5 +16,6 @@ namespace StudentAutomation.Application.Interfaces.Services.Contracts
         Task<IResult> AddAsync(StudentCreateDto dto);
         Task<IResult> UpdateAsync(StudentUpdateDto dto);
         Task<IResult> DeleteAsync(int id);
+        Task<IDataResult<List<StudentMiniDto>>> GetMinisAsync();
     }
 }

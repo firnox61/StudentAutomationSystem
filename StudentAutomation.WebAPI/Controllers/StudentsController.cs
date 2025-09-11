@@ -51,6 +51,14 @@ namespace StudentAutomation.WebAPI.Controllers
             var r = await _svc.UpdateAsync(dto);
             return r.Success ? Ok(r.Message) : BadRequest(r.Message);
         }
+        [HttpGet("minis")]
+        public async Task<IActionResult> GetMinis()
+        {
+            var result = await _svc.GetMinisAsync();
+            if (!result.Success) return BadRequest(result.Message);
+            return Ok(result.Data);
+        }
+
 
         [HttpDelete("{id}")]
      //   [Authorize(Roles = "Admin")]

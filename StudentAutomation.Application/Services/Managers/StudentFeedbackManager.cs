@@ -35,21 +35,21 @@ namespace StudentAutomation.Application.Services.Managers
             _feedbackDal = feedbackDal;
             _mapper = mapper;
         }
-
+        [SecuredOperation("Admin,Teacher")]
         public async Task<IDataResult<List<StudentFeedbackListDto>>> GetByCourseAsync(int courseId)
         {
             var list = await _feedbackDal.GetByCourseAsync(courseId); // entity list
             var dto = _mapper.Map<List<StudentFeedbackListDto>>(list);
             return new SuccessDataResult<List<StudentFeedbackListDto>>(dto);
         }
-
+        [SecuredOperation("Admin,Teacher")]
         public async Task<IDataResult<List<StudentFeedbackListDto>>> GetByStudentAsync(int studentId, int? courseId = null)
         {
             var list = await _feedbackDal.GetByStudentAsync(studentId, courseId); // entity list
             var dto = _mapper.Map<List<StudentFeedbackListDto>>(list);
             return new SuccessDataResult<List<StudentFeedbackListDto>>(dto);
         }
-        //  [SecuredOperation("Admin,Teacher")] // veya Controller'da [Authorize(Roles="Admin,Teacher")]
+        [SecuredOperation("Admin,Teacher")]
         public async Task<IResult> CreateAsync(StudentFeedbackCreateDto dto)
         {
             if (dto is null) return new ErrorResult("Geçersiz istek.");
@@ -88,7 +88,7 @@ namespace StudentAutomation.Application.Services.Managers
             return new SuccessResult("Yorum eklendi.");
         }
 
-
+        [SecuredOperation("Admin,Teacher")]
         public async Task<IResult> UpdateAsync(int userId, StudentFeedbackUpdateDto dto)
         {
             if (dto is null) return new ErrorResult("Geçersiz istek.");
@@ -110,7 +110,7 @@ namespace StudentAutomation.Application.Services.Managers
             await _feedbackDal.UpdateAsync(fb);
             return new SuccessResult("Yorum güncellendi.");
         }
-
+        [SecuredOperation("Admin,Teacher")]
         public async Task<IResult> DeleteAsync(int userId, int id)
         {
             var fb = await _feedbackDal.GetAsync(x => x.Id == id);

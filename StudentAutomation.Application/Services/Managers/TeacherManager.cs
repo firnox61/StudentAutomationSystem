@@ -2,6 +2,7 @@
 using StudentAutomation.Application.DTOs.Teachers;
 using StudentAutomation.Application.Interfaces.Services.Contracts;
 using StudentAutomation.Application.Repositories;
+using StudentAutomation.Core.Aspects.Security;
 using StudentAutomation.Core.Utilities.Results;
 using StudentAutomation.Domain.Entities;
 using System;
@@ -23,27 +24,27 @@ namespace StudentAutomation.Application.Services.Managers
             _mapper = mapper;
             _userDal = userDal;
         }
-
+        [SecuredOperation("Admin,Teacher")]
         public async Task<IDataResult<List<TeacherListDto>>> GetAllAsync()
         {
             var list = await _teacherDal.GetAllWithUserAsync();
             return new SuccessDataResult<List<TeacherListDto>>(_mapper.Map<List<TeacherListDto>>(list));
         }
-
+        [SecuredOperation("Admin,Teacher")]
         public async Task<IDataResult<TeacherDetailDto>> GetByIdAsync(int id)
         {
             var entity = await _teacherDal.GetByIdWithUserAsync(id);
             if (entity == null) return new ErrorDataResult<TeacherDetailDto>("Öğretmen bulunamadı.");
             return new SuccessDataResult<TeacherDetailDto>(_mapper.Map<TeacherDetailDto>(entity));
         }
-
+        [SecuredOperation("Admin,Teacher")]
         public async Task<IDataResult<TeacherDetailDto>> GetByUserIdAsync(int userId)
         {
             var entity = await _teacherDal.GetByUserIdWithUserAsync(userId);
             if (entity == null) return new ErrorDataResult<TeacherDetailDto>("Öğretmen bulunamadı.");
             return new SuccessDataResult<TeacherDetailDto>(_mapper.Map<TeacherDetailDto>(entity));
         }
-
+        [SecuredOperation("Admin,Teacher")]
         public async Task<IResult> AddAsync(TeacherCreateDto dto)
         {
             // User var mı kontrolü
@@ -61,7 +62,7 @@ namespace StudentAutomation.Application.Services.Managers
 
             return new SuccessResult("Öğretmen eklendi.");
         }
-
+        [SecuredOperation("Admin,Teacher")]
         public async Task<IResult> UpdateAsync(TeacherUpdateDto dto)
         {
             var entity = await _teacherDal.GetByIdAsync(dto.Id);
@@ -71,7 +72,7 @@ namespace StudentAutomation.Application.Services.Managers
             await _teacherDal.UpdateAsync(entity);
             return new SuccessResult("Öğretmen güncellendi.");
         }
-
+        [SecuredOperation("Admin,Teacher")]
         public async Task<IResult> DeleteAsync(int id)
         {
             var entity = await _teacherDal.GetByIdAsync(id);
