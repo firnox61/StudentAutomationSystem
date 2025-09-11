@@ -13,6 +13,65 @@ Modern, ölçeklenebilir bir öğrenci yönetim sistemi. Clean Architecture pren
 - [API Dokümantasyonu](#-api-dokümantasyonu)
 - [Test](#-test)
 - [Katkıda Bulunma](#-katkıda-bulunma)
+# Öğrenci Otomasyon Sistemi – Test ve Web Paneli
+
+Projeyi test edebilmeniz için **hazır test verisi** sağlayamıyoruz çünkü sistemde kullanıcı parolaları **hash** ile saklanmaktadır. Testleri kendi ortamınızda yapmanız gerekmektedir.
+
+## Test Kuralları
+1. Sistemde her kullanıcı **tek bir role** sahiptir: ya **öğrenci** ya da **öğretmen**.
+2. Kullanıcı kaydı yapmak için:
+   - Web panelinde **Kayıt Ol** bölümünden yeni bir kullanıcı oluşturun.
+3. Swagger tarafında oluşturduğunuz kullanıcıya **UserOperationClaims** ile gerekli yetki atamasını yapın.
+4. Claim ataması dışındaki tüm işlemleri **web paneli üzerinden** gerçekleştirebilirsiniz.
+5. API’nin geri kalan işlemleri çoğunlukla **backend tarafında** çalışmaktadır; web tarafında sadece erişebildiğiniz kısımları kullanabilirsiniz.
+
+## Web Paneli Modülleri
+
+### Öğrenciler
+- Öğrenci ekleme
+- Öğrenci detay görüntüleme
+- Öğrenci güncelleme
+- Öğrenci silme
+- Filtreleme ve arama
+
+### Öğretmenler
+- Öğretmen ekleme
+- Öğretmen detay görüntüleme
+- Öğretmen güncelleme
+- Öğretmen silme
+- Filtreleme ve arama
+
+### Kurslar
+- Kurs ekleme
+- Kurs detay görüntüleme
+- Kurs güncelleme
+- Kurs silme
+- Filtreleme ve arama
+
+### Yoklamalar
+- Yoklama ekleme
+- Yoklama detay görüntüleme
+- Yoklama güncelleme
+- Yoklama silme
+- Filtreleme ve arama
+
+### Notlar
+- Not ekleme
+- Not detay görüntüleme
+- Not güncelleme
+- Not silme
+
+### Öğrenci Feedback
+- Feedback ekleme
+- Feedback detay görüntüleme
+- Feedback güncelleme
+- Feedback silme
+- Filtreleme ve arama
+
+### Ders Kayıtları
+- Ders ekleme
+- Ders silme
+- Filtreleme ve arama
 
 ## 🎯 Proje Hakkında
 
