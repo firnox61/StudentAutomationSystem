@@ -271,6 +271,7 @@ cd StudentAutomation
 
 ```
 **Veritabanını docker üzerinden ayağı kaldırın**
+```bash
 docker run -d --name studentdb -e POSTGRES_DB=studentdb -e POSTGRES_USER=sa -e POSTGRES_PASSWORD=Password123* -p 5432:5432 -v studentdb-data:/var/lib/postgresql/data postgres:15
 
 
@@ -282,8 +283,8 @@ dotnet restore
 4. **Veritabanını oluşturun**
 ```bash
 cd StudentAutomation.Infrastructure
-//dotnet ef migrations add InitialCreate -p StudentAutomation.Infrastructure -s StudentAutomation.WebAPI
-//dotnet ef database update -p StudentAutomation.Infrastructure -s StudentAutomation.WebAPI
+dotnet ef migrations add InitialCreate -p StudentAutomation.Infrastructure -s StudentAutomation.WebAPI
+dotnet ef database update -p StudentAutomation.Infrastructure -s StudentAutomation.WebAPI
 ```
 
 5. **Uygulamayı çalıştırın**
