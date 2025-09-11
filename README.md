@@ -466,3 +466,5 @@ Bu proje MIT lisansı altında lisanslanmıştır. Detaylar için [LICENSE](LICE
 <img width="1657" height="466" alt="8" src="https://github.com/user-attachments/assets/99b2828d-cd06-4e12-a4dc-144e7646b5f3" />
 <img width="1876" height="701" alt="9" src="https://github.com/user-attachments/assets/b15fb64e-adec-4530-9984-8036b003f6c3" />
 <img width="1903" height="541" alt="10" src="https://github.com/user-attachments/assets/eb9a9b9a-8433-4ac1-87aa-0348a1acc4c7" />
+<img width="915" height="482" alt="11" src="https://github.com/user-attachments/assets/8d993613-bfce-4c75-995f-d2912756e75f" />
+
