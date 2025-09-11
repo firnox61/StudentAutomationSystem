@@ -24,7 +24,7 @@ Projeyi test edebilmeniz için **hazır test verisi** sağlayamıyoruz çünkü 
 3. Swagger tarafında oluşturduğunuz kullanıcıya **UserOperationClaims** ile gerekli yetki atamasını yapın.
 4. Claim ataması dışındaki tüm işlemleri **web paneli üzerinden** gerçekleştirebilirsiniz.
 5. API’nin geri kalan işlemleri çoğunlukla **backend tarafında** çalışmaktadır; web tarafında sadece erişebildiğiniz kısımları kullanabilirsiniz.
-
+6. **Docker**: Uygulama ve veritabanı container olarak çalıştırılabilir.
 ## Web Paneli Modülleri
 
 ### Öğrenciler
@@ -231,6 +231,62 @@ StudentAutomation/
 ```
 
 ## 🚀 Kurulum
+# StudentAutomationSystem - Docker Kullanımı
+
+Bu proje, StudentAutomationSystem backend uygulamasını Docker üzerinden çalıştırmak için hazır hale getirilmiştir. PostgreSQL veritabanı ve WebAPI container’ları kullanılarak ayağa kaldırılabilir.
+
+---
+
+## Gereksinimler
+
+* Docker
+* Docker Compose
+
+---
+
+## Docker Hub Üzerinden Image Çekme
+
+Projeyi çalıştırmak için Docker Hub’dan image’ı çekin:
+
+```bash
+docker pull ismaileneseroglu/studentautomation-api:latest
+```
+
+---
+
+## Docker Compose ile Çalıştırma
+
+`docker-compose.yml` dosyasını kullanarak uygulamayı ve veritabanını ayağa kaldırabilirsiniz:
+
+```bash
+docker-compose up -d
+```
+
+WebAPI artık çalışıyor ve Swagger UI üzerinden API endpointlerini test edebilirsiniz:
+
+```
+http://localhost:5000/swagger
+```
+
+---
+
+## Container’ları Durdurma ve Silme
+
+Uygulama ve veritabanı container’larını durdurmak için:
+
+```bash
+docker-compose down
+```
+
+Veritabanı verilerini de silmek istersen:
+
+```bash
+docker-compose down -v
+```
+
+---
+
+Bu adımlarla proje Docker ortamında hızlıca çalıştırılabilir ve test edilebilir.
 
 ### Gereksinimler
 
