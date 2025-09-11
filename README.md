@@ -184,7 +184,7 @@ StudentAutomation/
 
 1. **Repository'yi klonlayın**
 ```bash
-git clone git@github.com:firnox61/StudentAutomationSystem.git
+git clone https://github.com/firnox61/StudentAutomationSystem.git
 cd StudentAutomation
 ```
 
