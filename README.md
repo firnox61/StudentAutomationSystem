@@ -273,7 +273,7 @@ cd StudentAutomation
 **Veritabanını docker üzerinden ayağı kaldırın**
 ```bash
 docker run -d --name studentdb -e POSTGRES_DB=studentdb -e POSTGRES_USER=sa -e POSTGRES_PASSWORD=Password123* -p 5432:5432 -v studentdb-data:/var/lib/postgresql/data postgres:15
-
+```
 
 3. **NuGet paketlerini yükleyin**
 ```bash
