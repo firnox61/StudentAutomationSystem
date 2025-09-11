@@ -134,5 +134,11 @@ app.UseAuthorization();
 
 // Controller endpointleri
 app.MapControllers();
+// 🔹 Migration'ları otomatik uygula
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<DataContext>();
+    db.Database.Migrate();
+}
 
 app.Run();

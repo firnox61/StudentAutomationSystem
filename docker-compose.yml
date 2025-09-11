@@ -1,0 +1,26 @@
+services:
+  studentdb:
+    image: postgres:15
+    container_name: studentdb
+    environment:
+      POSTGRES_DB: studentdb
+      POSTGRES_USER: sa
+      POSTGRES_PASSWORD: Password123*
+    ports:
+      - "5432:5432"
+    volumes:
+      - studentdb_data:/var/lib/postgresql/data
+
+  webapi:
+    image: ismaileneseroglu/studentautomation-api:latest
+    container_name: studentautomation_api
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__DefaultConnection: "Host=studentdb;Database=studentdb;Username=sa;Password=Password123*"
+    ports:
+      - "5000:80"
+    depends_on:
+      - studentdb
+
+volumes:
+  studentdb_data:
