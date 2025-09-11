@@ -384,3 +384,12 @@ Bu proje MIT lisansı altında lisanslanmıştır. Detaylar için [LICENSE](LICE
 
 **Not**: Bu README dosyası projenin mevcut durumunu yansıtmaktadır. Yeni özellikler eklendikçe güncellenmektedir.
 <img width="1912" height="922" alt="1" src="https://github.com/user-attachments/assets/786c5b98-66b1-4766-9878-e0b6000629de" />
+<img width="1260" height="697" alt="2" src="https://github.com/user-attachments/assets/402e2b78-9333-4939-b0e2-126ca6ddcf1b" />
+<img width="1912" height="716" alt="3" src="https://github.com/user-attachments/assets/da9be180-25c0-4ee4-85e9-f59a3ebb93fc" />
+<img width="1608" height="437" alt="4" src="https://github.com/user-attachments/assets/bff71d43-6e80-464f-9898-85a3750ab9c0" />
+<img width="1897" height="642" alt="5" src="https://github.com/user-attachments/assets/a0ffc226-ac2d-42ed-83a9-f2c0d84c5479" />
+<img width="1642" height="493" alt="6" src="https://github.com/user-attachments/assets/00225bb9-1c09-4e58-9471-e4c63f3041ff" />
+<img width="1887" height="645" alt="7" src="https://github.com/user-attachments/assets/45983eaf-b79d-4f8a-8975-78cd86147864" />
+<img width="1657" height="466" alt="8" src="https://github.com/user-attachments/assets/99b2828d-cd06-4e12-a4dc-144e7646b5f3" />
+<img width="1876" height="701" alt="9" src="https://github.com/user-attachments/assets/b15fb64e-adec-4530-9984-8036b003f6c3" />
+<img width="1903" height="541" alt="10" src="https://github.com/user-attachments/assets/eb9a9b9a-8433-4ac1-87aa-0348a1acc4c7" />
