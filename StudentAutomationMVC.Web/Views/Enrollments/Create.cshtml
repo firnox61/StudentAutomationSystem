@@ -1,0 +1,47 @@
+﻿@model StudentAutomationMVC.Web.Models.Enrollments.EnrollRequestDto
+@using Microsoft.AspNetCore.Mvc.Rendering
+@{
+    ViewData["Title"] = "Derse Kaydet";
+    var students = ViewBag.Students as List<SelectListItem> ?? new();
+    var courses = ViewBag.Courses as List<SelectListItem> ?? new();
+}
+
+<h3>Derse Kaydet</h3>
+@await Html.PartialAsync("~/Views/Shared/_Alerts.cshtml")
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <form asp-action="Create" method="post">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">Öğrenci</label>
+                    <select asp-for="StudentId" class="form-select" asp-items="students">
+                        <option value="">Seçiniz...</option>
+                    </select>
+                    <span asp-validation-for="StudentId" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Ders</label>
+                    <select asp-for="CourseId" class="form-select" asp-items="courses">
+                        <option value="">Seçiniz...</option>
+                    </select>
+                    <span asp-validation-for="CourseId" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">Kayıt Tarihi</label>
+                    <!-- DateOnly için type="date" ve doğru format -->
+                    <input asp-for="EnrolledAt" type="date" class="form-control" asp-format="{0:yyyy-MM-dd}" />
+                    <span asp-validation-for="EnrolledAt" class="text-danger"></span>
+                </div>
+
+            </div>
+
+            <div class="mt-3 d-flex gap-2">
+                <button class="btn btn-primary">Kaydet</button>
+                <a asp-action="Index" asp-route-studentId="@Model.StudentId" class="btn btn-outline-secondary">Geri</a>
+            </div>
+        </form>
+    </div>
+</div>

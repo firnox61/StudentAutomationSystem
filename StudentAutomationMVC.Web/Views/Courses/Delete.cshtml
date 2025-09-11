@@ -1,0 +1,26 @@
+﻿@model StudentAutomationMVC.Web.Models.Courses.CourseDetailDto
+@{
+    ViewData["Title"] = "Kurs Sil";
+}
+
+<h3 class="mb-3 text-danger">Kurs Sil</h3>
+
+<div class="alert alert-warning">
+    <strong>Dikkat:</strong> Bu işlemi geri alamazsın. Silinecek kurs: <strong>@Model.Code - @Model.Name</strong>
+</div>
+
+<dl class="row">
+    <dt class="col-sm-3">Id</dt>
+    <dd class="col-sm-9">@Model.Id</dd>
+    <dt class="col-sm-3">Öğretmen</dt>
+    <dd class="col-sm-9">@(!string.IsNullOrWhiteSpace(Model.TeacherFullName) ? Model.TeacherFullName : "-")</dd>
+    <dt class="col-sm-3">Öğrenci Sayısı</dt>
+    <dd class="col-sm-9">@Model.EnrollmentCount</dd>
+</dl>
+
+<form asp-action="Delete" method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="id" value="@Model.Id" />
+    <a class="btn btn-outline-secondary" asp-action="Index">Vazgeç</a>
+    <button class="btn btn-danger" type="submit">Evet, Sil</button>
+</form>

@@ -25,7 +25,7 @@ namespace StudentAutomation.Application.Services.Managers
             _mapper = mapper;
             _userDal = userDal;
         }
-       // [SecuredOperation("Admin,Teacher")]
+        //[SecuredOperation("Admin,Teacher")]
         public async Task<IDataResult<List<StudentListDto>>> GetAllAsync()
         {
             var list = await _studentDal.GetAllWithUserAsync();
@@ -57,8 +57,8 @@ namespace StudentAutomation.Application.Services.Managers
                 return new ErrorResult("Kullanıcı bulunamadı.");
 
             // EF katmanına delege edilen kontrol
-            if (await _userDal.HasAnyClaimAsync(dto.UserId))
-                return new ErrorResult("Bu kullanıcıya zaten kullanıcı atanmış. Öğrenci eklenemez.");
+           /* if (await _userDal.HasAnyClaimAsync(dto.UserId))
+                return new ErrorResult("Bu kullanıcıya zaten kullanıcı atanmış. Öğrenci eklenemez.");*/
 
             var entity = _mapper.Map<Student>(dto);
             await _studentDal.AddAsync(entity);

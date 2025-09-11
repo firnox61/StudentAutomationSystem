@@ -22,7 +22,13 @@ namespace StudentAutomation.WebAPI.Controllers
             var r = await _svc.UpsertAsync(dto);
             return r.Success ? Ok(r.Message) : BadRequest(r.Message);
         }
-
+        [HttpGet]
+        //  [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetAll()
+        {
+            var r = await _svc.GetAllAsync();
+            return r.Success ? Ok(r.Data) : BadRequest(r.Message);
+        }
         [HttpDelete("{id}")]
       //  [Authorize(Roles = "Admin,Teacher")]
         public async Task<IActionResult> Delete(int id)

@@ -13,7 +13,7 @@ namespace StudentAutomation.Domain.Entities
         public int UserId { get; set; }                 // FK -> User
         public string StudentNumber { get; set; } = default!;
         public string? Department { get; set; }
-        public DateTime? BirthDate { get; set; }
+        public DateOnly? BirthDate { get; set; }
         public bool Status { get; set; } = true;
 
         public User User { get; set; } = default!;

@@ -95,9 +95,16 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidAudience = tokenOptions.Audience,
             ValidateIssuerSigningKey = true,
             IssuerSigningKey = SecurityKeyHelper.CreateSecurityKey(tokenOptions.SecurityKey),
-            RoleClaimType = ClaimTypes.Role,
-            NameClaimType = ClaimTypes.NameIdentifier,
-            ClockSkew = TimeSpan.Zero
+            // ÖNEMLİ: JWT'de "role" adını rol olarak kullan
+           // RoleClaimType = "role",
+
+            // İsteğe bağlı ama netlik için önerilir: "name" → User.Identity.Name
+           // NameClaimType = "name",
+
+          //  ClockSkew = TimeSpan.Zero
+              RoleClaimType = ClaimTypes.Role,
+             NameClaimType = ClaimTypes.NameIdentifier,
+              ClockSkew = TimeSpan.Zero
         };
     });
 
@@ -112,7 +119,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI(); // -> /swagger
 }
-
+app.MapGet("/", context =>
+{
+    context.Response.Redirect("/swagger/index.html");
+    return Task.CompletedTask;
+});
 // Statik dosyalar (gerekliyse)
 app.UseStaticFiles();
 

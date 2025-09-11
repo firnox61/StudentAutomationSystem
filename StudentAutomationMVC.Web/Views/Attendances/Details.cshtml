@@ -1,0 +1,38 @@
+﻿@model StudentAutomationMVC.Web.Models.Attendances.AttendanceDetailDto
+@{
+    ViewData["Title"] = "Yoklama Detayı";
+}
+
+<h3 class="mb-3">Yoklama Detayı</h3>
+@await Html.PartialAsync("~/Views/Shared/_Alerts.cshtml")
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Tarih</dt>
+            <dd class="col-sm-9">@Model.Date.ToString("yyyy-MM-dd")</dd>
+
+            <dt class="col-sm-3">Hafta</dt>
+            <dd class="col-sm-9">@((Model.Week?.ToString()) ?? "-")</dd>
+
+            <dt class="col-sm-3">Ders</dt>
+            <dd class="col-sm-9">@Model.CourseCode — @Model.CourseName</dd>
+
+            <dt class="col-sm-3">Öğrenci</dt>
+            <dd class="col-sm-9">@Model.StudentFullName</dd>
+
+            <dt class="col-sm-3">Durum</dt>
+            <dd class="col-sm-9">@Model.Status</dd>
+
+            <dt class="col-sm-3">Not</dt>
+            <dd class="col-sm-9">@Model.Note</dd>
+        </dl>
+
+        <div class="d-flex gap-2 mt-3">
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">
+                <i class="bi bi-pencil"></i> Düzenle
+            </a>
+            <a asp-action="Index" class="btn btn-outline-secondary">Geri</a>
+        </div>
+    </div>
+</div>

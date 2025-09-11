@@ -1,0 +1,42 @@
+﻿@model List<StudentAutomationMVC.Web.Models.Students.StudentMiniDto>
+@{
+    ViewData["Title"] = "Kurs Öğrencileri";
+    var courseId = (int)(ViewBag.CourseId ?? 0);
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h3 class="m-0">Kurs Öğrencileri (Kurs Id: @courseId)</h3>
+    <a class="btn btn-outline-secondary" asp-action="Details" asp-route-id="@courseId">Derse Dön</a>
+</div>
+
+@if (TempData["Error"] is string err)
+{
+    <div class="alert alert-danger">@err</div>
+}
+
+@if (Model == null || Model.Count == 0)
+{
+    <div class="text-muted">Kayıtlı öğrenci bulunamadı.</div>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Numara</th>
+                <th>Ad Soyad</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var s in Model)
+            {
+                <tr>
+                    <td>@s.Id</td>
+                    <td>@s.StudentNumber</td>
+                    <td>@s.FullName</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

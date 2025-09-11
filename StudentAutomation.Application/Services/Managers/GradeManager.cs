@@ -122,5 +122,12 @@ namespace StudentAutomation.Application.Services.Managers
 
             return new SuccessDataResult<StudentGradeAverageDto>(dto);
         }
-    }
+
+        public async Task<IDataResult<List<GradeListDto>>> GetAllAsync()
+        {
+            var list = await _gradeDal.GetAllDetailAsync(); // ⬅⬅⬅ önemli
+            var dto = _mapper.Map<List<GradeListDto>>(list);
+            return new SuccessDataResult<List<GradeListDto>>(dto);
+        }
+    }//return new SuccessDataResult<List<TeacherListDto>>(_mapper.Map<List<TeacherListDto>>(list));
 }

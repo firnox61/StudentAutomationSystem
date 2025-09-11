@@ -1,0 +1,37 @@
+﻿@model StudentAutomationMVC.Web.Models.Grades.GradeDetailDto
+@{
+    ViewData["Title"] = "Not Sil";
+}
+<h3>Not Sil</h3>
+@await Html.PartialAsync("~/Views/Shared/_Alerts.cshtml")
+
+<div class="alert alert-warning">
+    Bu not kaydını silmek istediğinize emin misiniz?
+</div>
+
+<div class="card shadow-sm mb-3">
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Öğrenci</dt>
+            <dd class="col-sm-9">@Model.StudentFullName</dd>
+
+            <dt class="col-sm-3">Ders</dt>
+            <dd class="col-sm-9">@Model.CourseCode - @Model.CourseName</dd>
+
+            <dt class="col-sm-3">Tür</dt>
+            <dd class="col-sm-9">@Model.Type</dd>
+
+            <dt class="col-sm-3">Not</dt>
+            <dd class="col-sm-9">@Model.Value</dd>
+
+            <dt class="col-sm-3">Dönem</dt>
+            <dd class="col-sm-9">@Model.Term</dd>
+        </dl>
+
+        <form asp-action="Delete" method="post">
+            <input type="hidden" name="id" value="@Model.Id" />
+            <button class="btn btn-danger">Evet, Sil</button>
+            <a asp-action="Index" class="btn btn-outline-secondary">Vazgeç</a>
+        </form>
+    </div>
+</div>

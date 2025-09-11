@@ -2,6 +2,7 @@
 using Autofac.Extras.DynamicProxy;
 using Castle.DynamicProxy;
 using Microsoft.Extensions.DependencyInjection;
+using StudentAutomation.Application.Abstraction;
 using StudentAutomation.Application.Interfaces.Services.Contracts;
 using StudentAutomation.Application.Repositories;
 using StudentAutomation.Application.Services.Managers;
@@ -12,6 +13,7 @@ using StudentAutomation.Domain.Security;
 using StudentAutomation.Infrastructure.Persistence.Repositories.EntityFramework;
 using StudentAutomation.Infrastructure.Security.Hashing;
 using StudentAutomation.Infrastructure.Security.Jwt;
+using StudentAutomation.WebAPI.getClaim;
 
 
 namespace StudentAutomation.WebAPI.DependencyInjection
@@ -64,8 +66,10 @@ namespace StudentAutomation.WebAPI.DependencyInjection
 
             builder.RegisterType<JwtHelper>().As<ITokenHelper>();
             builder.RegisterType<HashingService>().As<IHashingService>();
+            builder.RegisterType<CurrentUser>().As<ICurrentUser>();
+           // builder.Services.AddScoped<ICurrentUser, CurrentUser>();
             // builder.RegisterType<AuditLogService>().As<IAuditLogService>().InstancePerLifetimeScope();
-           // serviceCollection.AddScoped<IAuditLogService, AuditLogService>();
+            // serviceCollection.AddScoped<IAuditLogService, AuditLogService>();
 
             // builder.RegisterType<AuditLogCleanupJob>().AsSelf();
 

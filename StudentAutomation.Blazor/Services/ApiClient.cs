@@ -1,4 +1,6 @@
 ﻿using StudentAutomation.Blazor.Models;
+using StudentAutomation.Blazor.Models.Auth;
+using System.Net;
 
 namespace StudentAutomation.Blazor.Services
 {
@@ -102,6 +104,52 @@ namespace StudentAutomation.Blazor.Services
 
             var list = await resp.Content.ReadFromJsonAsync<List<CourseListDto>>();
             return list?.Count ?? 0;
+        }
+        public async Task<AccessTokenDto> LoginAsync(string email, string password, CancellationToken ct = default)
+        {
+            var body = new
+            {
+                Email = email,
+                Password = password
+            };
+
+            // Backend’de AuthController’da /api/auth/login gibi varsayıyorum.
+            using var resp = await _http.PostAsJsonAsync("auth/login", body, ct);
+            if (!resp.IsSuccessStatusCode)
+            {
+                // 401/400 mesajını oku (kullanıcıya göstereceğiz)
+                var msg = await resp.Content.ReadAsStringAsync(ct);
+                throw new InvalidOperationException(string.IsNullOrWhiteSpace(msg) ? "Giriş başarısız." : msg);
+            }
+
+            var dto = await resp.Content.ReadFromJsonAsync<AccessTokenDto>(cancellationToken: ct);
+            if (dto is null || string.IsNullOrWhiteSpace(dto.Token))
+                throw new InvalidOperationException("Sunucudan geçerli token alınamadı.");
+
+            return dto;
+        }
+        public async Task<bool> RegisterAsync(RegisterRequest req, CancellationToken ct = default)
+        {
+            var body = new
+            {
+                FirstName = req.FirstName,
+                LastName = req.LastName,
+                Email = req.Email,
+                Password = req.Password
+            };
+
+            using var resp = await _http.PostAsJsonAsync("auth/register", body, ct);
+            if (resp.StatusCode == HttpStatusCode.Conflict) // e-posta zaten var vb.
+            {
+                var msg = await resp.Content.ReadAsStringAsync(ct);
+                throw new InvalidOperationException(string.IsNullOrWhiteSpace(msg) ? "Kullanıcı zaten kayıtlı." : msg);
+            }
+            if (!resp.IsSuccessStatusCode)
+            {
+                var msg = await resp.Content.ReadAsStringAsync(ct);
+                throw new InvalidOperationException(string.IsNullOrWhiteSpace(msg) ? "Kayıt başarısız." : msg);
+            }
+            return true; // backend User döndürse bile burada başarıyı bool yeterli kabul ediyoruz
         }
     }
 }

@@ -1,0 +1,24 @@
+﻿@model StudentAutomationMVC.Web.Models.Students.StudentDetailDto
+@{
+    ViewData["Title"] = "Öğrenci Sil";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<div class="alert alert-warning">
+    <p><strong>@Model.FirstName @Model.LastName</strong> öğrencisini silmek istediğinizden emin misiniz?</p>
+    <ul>
+        <li>ID: @Model.Id</li>
+        <li>Öğrenci No: @Model.StudentNumber</li>
+        <li>E-posta: @Model.Email</li>
+        <li>Bölüm: @Model.Department</li>
+        <li>Durum: @((Model.Status) ? "Aktif" : "Pasif")</li>
+    </ul>
+</div>
+
+<form asp-action="Delete" method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="id" value="@Model.Id" />
+    <button type="submit" class="btn btn-danger">Sil</button>
+    <a asp-action="Index" class="btn btn-secondary">Vazgeç</a>
+</form>

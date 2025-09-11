@@ -52,8 +52,8 @@ namespace StudentAutomation.Application.Services.Managers
                 return new ErrorResult("Kullanıcı bulunamadı.");
 
             // Kullanıcıya rol atanmışsa engelle
-            if (await _userDal.HasAnyClaimAsync(dto.UserId))
-                return new ErrorResult("Bu kullanıcıya zaten rol atanmış. Öğretmen eklenemez.");
+           /* if (await _userDal.HasAnyClaimAsync(dto.UserId))
+                return new ErrorResult("Bu kullanıcıya zaten rol atanmış. Öğretmen eklenemez.");*/
 
             // Haritalama ve ekleme
             var entity = _mapper.Map<Teacher>(dto);

@@ -12,8 +12,7 @@ namespace StudentAutomation.Domain.Entities
     {
         public int StudentId { get; set; }
         public int CourseId { get; set; }
-        public DateTime EnrolledAt { get; set; } = DateTime.UtcNow;
-
+        public DateOnly? EnrolledAt { get; set; }  // nullable ise ? bırak
         public Student Student { get; set; } = default!;
         public Course Course { get; set; } = default!;
     }

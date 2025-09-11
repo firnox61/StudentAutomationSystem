@@ -13,7 +13,7 @@ namespace StudentAutomation.Application.Interfaces.Services.Contracts
         Task<IDataResult<List<StudentFeedbackListDto>>> GetByCourseAsync(int courseId);
         Task<IDataResult<List<StudentFeedbackListDto>>> GetByStudentAsync(int studentId, int? courseId = null);
 
-        Task<IResult> CreateAsync(int userId, StudentFeedbackCreateDto dto);
+        Task<IResult> CreateAsync(StudentFeedbackCreateDto dto);
         Task<IResult> UpdateAsync(int userId, StudentFeedbackUpdateDto dto);
         Task<IResult> DeleteAsync(int userId, int id);
     }

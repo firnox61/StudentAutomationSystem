@@ -168,9 +168,11 @@ namespace StudentAutomation.Infrastructure.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("course_id");
 
-                    b.Property<DateTime>("EnrolledAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("enrolled_at");
+                    b.Property<DateOnly?>("EnrolledAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("date")
+                        .HasColumnName("enrolled_at")
+                        .HasDefaultValueSql("CURRENT_DATE");
 
                     b.HasKey("StudentId", "CourseId")
                         .HasName("pk_enrollments");
@@ -265,8 +267,8 @@ namespace StudentAutomation.Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime?>("BirthDate")
-                        .HasColumnType("timestamp with time zone")
+                    b.Property<DateOnly?>("BirthDate")
+                        .HasColumnType("date")
                         .HasColumnName("birth_date");
 
                     b.Property<string>("Department")

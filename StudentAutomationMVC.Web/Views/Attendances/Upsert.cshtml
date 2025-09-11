@@ -1,0 +1,73 @@
+﻿@model StudentAutomationMVC.Web.Models.Attendances.AttendanceUpsertDto
+@using Microsoft.AspNetCore.Mvc.Rendering
+@{
+    ViewData["Title"] = (ViewBag.EditId != null) ? "Yoklama Düzenle" : "Yeni Yoklama";
+    var students = ViewBag.Students as List<SelectListItem> ?? new();
+    var courses = ViewBag.Courses as List<SelectListItem> ?? new();
+}
+
+<h3 class="mb-3">@ViewData["Title"]</h3>
+@await Html.PartialAsync("~/Views/Shared/_Alerts.cshtml")
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <form method="post" asp-action="@(ViewBag.EditId != null ? "Edit" : "Create")" asp-route-id="@ViewBag.EditId">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">Öğrenci</label>
+                    <select asp-for="StudentId" class="form-select" asp-items="students">
+                        <option value="">Seçiniz...</option>
+                    </select>
+                    <span asp-validation-for="StudentId" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Ders</label>
+                    <select asp-for="CourseId" class="form-select" asp-items="courses">
+                        <option value="">Seçiniz...</option>
+                    </select>
+                    <span asp-validation-for="CourseId" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">Tarih</label>
+                    <input asp-for="Date" class="form-control" type="date" />
+                    <span asp-validation-for="Date" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-2">
+                    <label class="form-label">Hafta</label>
+                    <input asp-for="Week" class="form-control" type="number" min="1" />
+                    <span asp-validation-for="Week" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Durum</label>
+                    <select asp-for="Status" class="form-select">
+                        <option value="1">Geldi</option>
+                        <option value="2">Gelmedi</option>
+                        <option value="3">İzinli</option>
+                    </select>
+                    <span asp-validation-for="Status" class="text-danger"></span>
+                </div>
+
+                <div class="col-12">
+                    <label class="form-label">Not</label>
+                    <textarea asp-for="Note" class="form-control" rows="3" placeholder="İsteğe bağlı açıklama"></textarea>
+                    <span asp-validation-for="Note" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="d-flex gap-2 mt-4">
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-check2-circle"></i> Kaydet
+                </button>
+                <a asp-action="Index" class="btn btn-outline-secondary">Geri</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

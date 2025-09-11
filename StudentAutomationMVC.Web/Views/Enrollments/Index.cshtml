@@ -1,0 +1,95 @@
+﻿@model List<StudentAutomationMVC.Web.Models.Courses.CourseMiniDto>
+@using Microsoft.AspNetCore.Mvc.Rendering
+@{
+    ViewData["Title"] = "Kayıtlı Dersler";
+    var studentId = (int?)ViewBag.StudentId;
+    var students = ViewBag.Students as List<SelectListItem> ?? new();
+}
+
+<div class="d-flex align-items-center justify-content-between mb-3">
+    <h3 class="m-0">Öğrencinin Kayıtlı Dersleri</h3>
+    <div>
+        <a asp-action="Create" asp-route-studentId="@studentId" class="btn btn-primary">
+            <i class="bi bi-plus-lg"></i> Derse Kaydet
+        </a>
+    </div>
+</div>
+
+@await Html.PartialAsync("~/Views/Shared/_Alerts.cshtml")
+
+<div class="card shadow-sm mb-3">
+    <div class="card-body">
+        <form method="get" class="row g-2 align-items-end">
+            <div class="col-md-6">
+                <label class="form-label">Öğrenci</label>
+                <select name="studentId" class="form-select">
+                    <option value="">Seçiniz...</option>
+                    @foreach (var s in students)
+                    {
+                        <option value="@s.Value" selected="@(s.Selected)">@s.Text</option>
+                    }
+                </select>
+            </div>
+
+            @* İstersen ada göre de gönderebilirsin (opsiyonel):
+            <div class="col-md-6">
+                <label class="form-label">Öğrenci Adı (opsiyonel)</label>
+                <input name="studentName" class="form-control" placeholder="Ad Soyad yaz" />
+            </div>
+            *@
+
+            <div class="col-auto">
+                <button type="submit" class="btn btn-outline-secondary">Listele</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@if (studentId is null || studentId <= 0)
+{
+    <div class="alert alert-info">Lütfen bir <b>öğrenci</b> seçip listeleyin.</div>
+}
+else
+{
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <table class="table align-middle" id="coursesTable">
+                <thead class="table-light">
+                    <tr>
+                        <th>Kod</th>
+                        <th>Ad</th>
+                        <th style="width:140px"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model?.Any() == true)
+                    {
+                        foreach (var c in Model)
+                        {
+                            <tr>
+                                <td>@c.Code</td>
+                                <td>@c.Name</td>
+                                <td class="text-end">
+                                    <div class="btn-group">
+                                        <a asp-action="Delete"
+                                           asp-route-studentId="@studentId"
+                                           asp-route-courseId="@c.Id"
+                                           class="btn btn-outline-danger btn-sm">
+                                            <i class="bi bi-trash"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="3" class="text-center text-muted py-4">Kayıtlı ders bulunamadı.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}

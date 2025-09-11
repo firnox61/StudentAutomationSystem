@@ -1,0 +1,53 @@
+﻿@model StudentAutomationMVC.Web.Models.Users.UserForLoginDto
+
+@{
+    Layout = "~/Views/Shared/_Layout.Auth.cshtml";
+    ViewData["Title"] = "Giriş Yap";
+}
+
+<form method="post" asp-action="Login" novalidate>
+    @Html.AntiForgeryToken()
+
+    <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+    <div class="mb-3">
+        <label asp-for="Email" class="form-label">
+            <i class="fas fa-envelope"></i> E-posta
+        </label>
+        <input asp-for="Email" class="form-control" placeholder="ornek@mail.com" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Password" class="form-label">
+            <i class="fas fa-lock"></i> Şifre
+        </label>
+        <input asp-for="Password" type="password" class="form-control" placeholder="•••••••" />
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="rememberMe" name="RememberMe" />
+            <label class="form-check-label" for="rememberMe">Beni Hatırla</label>
+        </div>
+        <a asp-controller="auth" asp-action="ForgotPassword" class="text-decoration-none">Şifremi Unuttum?</a>
+    </div>
+
+    <button type="submit" class="btn btn-success w-100">
+        <i class="fas fa-sign-in-alt me-1"></i> Giriş Yap
+    </button>
+
+    <hr class="my-4" />
+
+    <div class="text-center">
+        <span class="text-muted">Hesabın yok mu?</span>
+        <a asp-controller="auth" asp-action="Register" class="btn btn-outline-primary w-100 mt-2">
+            <i class="fas fa-user-plus me-1"></i> Kayıt Ol
+        </a>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -25,8 +25,8 @@ namespace StudentAutomation.Application.Services.Managers
             _mapper = mapper;
             _hashingService = hashingService;
         }
-        [ValidationAspect(typeof(UserDtoValidator))]
-        [TransactionScopeAspect]
+      //  [ValidationAspect(typeof(UserDtoValidator))]
+      //  [TransactionScopeAspect]
         public async Task<IResult> EditProfil(UserDto userDto, string password)
         {
             byte[] passwordHash, passwordSalt;
@@ -39,15 +39,15 @@ namespace StudentAutomation.Application.Services.Managers
             await _userDal.UpdateAsync(user);
             return new SuccessResult("Müşteri bilgileri güncellendi");
         }
-        [ValidationAspect(typeof(UserCreateDtoValidator))]
-        [TransactionScopeAspect]
+    //    [ValidationAspect(typeof(UserCreateDtoValidator))]
+    //    [TransactionScopeAspect]
         public async Task<IResult> AddAsync(UserCreateDto dto)
         {
             var user = _mapper.Map<User>(dto);
             await _userDal.AddAsync(user);
             return new SuccessResult();
         }
-        [TransactionScopeAspect]
+     //   [TransactionScopeAspect]
         public async Task<IResult> DeleteAsync(int id)
         {
             var user = await _userDal.GetAsync(u => u.Id == id);
@@ -57,14 +57,14 @@ namespace StudentAutomation.Application.Services.Managers
             await _userDal.DeleteAsync(user);
             return new SuccessResult("Kullanıcı silindi.");
         }
-        [CacheAspect]
+        //[CacheAspect]
         public async Task<IDataResult<List<UserListDto>>> GetAllAsync()
         {
             var users = await _userDal.GetAllAsync();
             var dtoList = _mapper.Map<List<UserListDto>>(users);
             return new SuccessDataResult<List<UserListDto>>(dtoList);
         }
-        [CacheAspect]
+   //     [CacheAspect]
         public async Task<IDataResult<User>> GetByEmailAsync(string email)
         {
             var user = await _userDal.GetAsync(u => u.Email == email);
@@ -73,7 +73,7 @@ namespace StudentAutomation.Application.Services.Managers
 
             return new SuccessDataResult<User>(user);
         }
-        [CacheAspect]
+     //   [CacheAspect]
         public async Task<IDataResult<UserListDto>> GetByIdAsync(int id)
         {
             var user = await _userDal.GetAsync(u => u.Id == id);
@@ -83,7 +83,7 @@ namespace StudentAutomation.Application.Services.Managers
             var dto = _mapper.Map<UserListDto>(user);
             return new SuccessDataResult<UserListDto>(dto);
         }
-        [CacheAspect]
+        //[CacheAspect]
         public async Task<IDataResult<List<OperationClaim>>> GetClaimsAsync(User user)
         {
             var claims = await _userDal.GetClaimsAsync(user); // DAL'de bu olmalı

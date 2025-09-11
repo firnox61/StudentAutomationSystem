@@ -13,7 +13,12 @@ namespace StudentAutomation.Infrastructure.Persistence.Repositories.EntityFramew
     public class EfGradeDal : EfEntityRepositoryBase<Grade, DataContext>, IGradeDal
     {
         public EfGradeDal(DataContext c) : base(c) { }
-
+        public Task<List<Grade>> GetAllDetailAsync() =>
+       _context.Grades
+           .AsNoTracking()
+           .Include(g => g.Course)
+           .Include(g => g.Student).ThenInclude(s => s.User)
+           .ToListAsync();
         public Task<Grade?> GetByIdDetailAsync(int id) =>
             _context.Grades.AsNoTracking()
                 .Include(g => g.Course)

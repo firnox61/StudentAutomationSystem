@@ -1,0 +1,95 @@
+﻿@page "/auth/login"
+@using System.ComponentModel.DataAnnotations
+@using StudentAutomation.Blazor.Auth
+@using StudentAutomation.Blazor.Services
+@using StudentAutomation.Blazor.Models.Auth
+@inject IApiClient Api
+@inject IJwtCookieAuthService AuthService
+@inject AuthenticationStateProvider AuthProvider
+@inject NavigationManager Nav
+
+<div class="auth-wrapper d-flex align-items-center justify-content-center" style="min-height: 100vh;">
+    <div class="card auth-card shadow-sm" style="min-width:380px;max-width:420px;width:100%;">
+        <div class="card-body p-4">
+            <h4 class="mb-1 text-center">Giriş Yap</h4>
+            <p class="text-muted text-center mb-4">Hesabınla devam et</p>
+
+            @if (!string.IsNullOrEmpty(_error))
+            {
+                <div class="alert alert-danger" role="alert">@_error</div>
+            }
+
+            <EditForm Model="_model" OnValidSubmit="HandleLoginAsync">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+
+                <div class="mb-3">
+                    <label class="form-label" for="email">E-posta</label>
+                    <InputText id="email" class="form-control" @bind-Value="_model.Email" autocomplete="username" />
+                    <ValidationMessage For="@(() => _model.Email)" />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" for="password">Şifre</label>
+                    <InputText id="password" class="form-control" type="password" @bind-Value="_model.Password" autocomplete="current-password" />
+                    <ValidationMessage For="@(() => _model.Password)" />
+                </div>
+
+                <button class="btn btn-primary w-100" type="submit" disabled="@_busy">
+                    @(_busy ? "Giriş yapılıyor..." : "Giriş")
+                </button>
+            </EditForm>
+
+            <div class="text-center mt-3">
+                <a class="small text-muted" href="/auth/register">Hesabın yok mu? Kayıt ol</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private readonly LoginRequest _model = new();
+    private string? _error;
+    private bool _busy;
+
+    public class LoginRequest
+    {
+        [Required(ErrorMessage = "E-posta zorunludur.")]
+        [EmailAddress(ErrorMessage = "Geçerli bir e-posta giriniz.")]
+        public string Email { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "Şifre zorunludur.")]
+        [MinLength(6, ErrorMessage = "Şifre en az 6 karakter olmalıdır.")]
+        public string Password { get; set; } = string.Empty;
+    }
+
+    private async Task HandleLoginAsync()
+    {
+        _error = null;
+        _busy = true;
+        try
+        {
+            // 1) API: AccessTokenDto bekleniyor
+            //   örn: class AccessTokenDto { public string Token {get;set;} public DateTime Expiration {get;set;} }
+            AccessTokenDto tokenDto = await Api.LoginAsync(_model.Email, _model.Password);
+
+            // 2) Cookie auth + sa.api_token (süreyi de ilet)
+            await AuthService.SignInWithJwtAsync(tokenDto.Token, tokenDto.Expiration);
+
+            // 3) Blazor kimlik güncelle
+            if (AuthProvider is JwtCookieAuthStateProvider p) p.ForceRefresh();
+
+            // 4) Yönlendir
+            Nav.NavigateTo("/", forceLoad: true);
+        }
+        catch (Exception ex)
+        {
+            _error = ex.Message;
+        }
+        finally
+        {
+            _busy = false;
+            StateHasChanged();
+        }
+    }
+}

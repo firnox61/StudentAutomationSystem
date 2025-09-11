@@ -1,0 +1,53 @@
+﻿@model StudentAutomationMVC.Web.Models.Courses.CourseUpdateDto
+@{
+    ViewData["Title"] = "Kurs Düzenle";
+}
+
+<h3 class="mb-3">Kurs Düzenle</h3>
+
+@if (TempData["Error"] is string err)
+{
+    <div class="alert alert-danger">@err</div>
+}
+
+<form asp-action="Edit" method="post" class="card">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="Id" />
+    <div class="card-body">
+        <div class="mb-3">
+            <label class="form-label">Kod</label>
+            <input asp-for="Code" class="form-control" />
+            <span class="text-danger" asp-validation-for="Code"></span>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Ad</label>
+            <input asp-for="Name" class="form-control" />
+            <span class="text-danger" asp-validation-for="Name"></span>
+        </div>
+        <div class="row g-3">
+            <div class="col-md-4">
+                <label class="form-label">Kredi</label>
+                <input asp-for="Credits" type="number" class="form-control" />
+                <span class="text-danger" asp-validation-for="Credits"></span>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Öğretmen Id (opsiyonel)</label>
+                <input asp-for="TeacherId" type="number" class="form-control" />
+            </div>
+            <div class="col-md-4 d-flex align-items-center">
+                <div class="form-check mt-4">
+                    <input class="form-check-input" asp-for="IsActive" />
+                    <label class="form-check-label" asp-for="IsActive">Aktif</label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer d-flex justify-content-between">
+        <a class="btn btn-outline-secondary" asp-action="Index">Geri</a>
+        <button class="btn btn-primary" type="submit">Güncelle</button>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

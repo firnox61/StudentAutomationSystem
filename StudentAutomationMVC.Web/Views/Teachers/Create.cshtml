@@ -1,0 +1,17 @@
+﻿@model StudentAutomationMVC.Web.Models.Teachers.TeacherCreateDto
+@{
+    ViewData["Title"] = "Yeni Öğretmen";
+}
+
+<div class="d-flex align-items-center justify-content-between mb-3">
+    <h3 class="m-0">Yeni Öğretmen</h3>
+    <a asp-action="Index" class="btn btn-outline-secondary">Listeye Dön</a>
+</div>
+
+@await Html.PartialAsync("~/Views/Shared/_Alerts.cshtml")
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <partial name="_CreateForm" model="Model" />
+    </div>
+</div>

@@ -17,5 +17,6 @@ namespace StudentAutomation.Application.Interfaces.Services.Contracts
         Task<IDataResult<List<GradeListDto>>> GetByCourseAsync(int courseId);
         Task<IDataResult<GradeDetailDto>> GetByIdAsync(int id);
         Task<IDataResult<StudentGradeAverageDto>> AverageByStudentAsync(int studentId, string? term = null);
+        Task<IDataResult<List<GradeListDto>>> GetAllAsync();
     }
 }

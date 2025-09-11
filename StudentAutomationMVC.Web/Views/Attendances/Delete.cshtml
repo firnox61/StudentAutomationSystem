@@ -1,0 +1,42 @@
+﻿@model StudentAutomationMVC.Web.Models.Attendances.AttendanceDetailDto
+@{
+    ViewData["Title"] = "Yoklama Sil";
+}
+
+<h3 class="mb-3 text-danger">Yoklama Sil</h3>
+@await Html.PartialAsync("~/Views/Shared/_Alerts.cshtml")
+
+<div class="alert alert-warning">
+    Bu yoklama kaydını silmek istediğinize emin misiniz?
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Tarih</dt>
+            <dd class="col-sm-9">@Model.Date.ToString("yyyy-MM-dd")</dd>
+
+            <dt class="col-sm-3">Ders</dt>
+            <dd class="col-sm-9">@Model.CourseCode — @Model.CourseName</dd>
+
+            <dt class="col-sm-3">Öğrenci</dt>
+            <dd class="col-sm-9">@Model.StudentFullName</dd>
+
+            <dt class="col-sm-3">Durum</dt>
+            <dd class="col-sm-9">@Model.Status</dd>
+
+            <dt class="col-sm-3">Not</dt>
+            <dd class="col-sm-9">@Model.Note</dd>
+        </dl>
+
+        <form asp-action="Delete" method="post">
+            <input type="hidden" name="id" value="@Model.Id" />
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-danger">
+                    <i class="bi bi-trash"></i> Sil
+                </button>
+                <a asp-action="Index" class="btn btn-outline-secondary">Vazgeç</a>
+            </div>
+        </form>
+    </div>
+</div>

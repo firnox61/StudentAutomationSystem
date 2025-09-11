@@ -1,0 +1,39 @@
+﻿@model StudentAutomationMVC.Web.Models.Students.StudentDetailDto
+@{
+    ViewData["Title"] = "Öğrenci Detayı";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<div class="card">
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">ID</dt>
+            <dd class="col-sm-9">@Model.Id</dd>
+
+            <dt class="col-sm-3">Öğrenci No</dt>
+            <dd class="col-sm-9">@Model.StudentNumber</dd>
+
+            <dt class="col-sm-3">Ad</dt>
+            <dd class="col-sm-9">@Model.FirstName</dd>
+
+            <dt class="col-sm-3">Soyad</dt>
+            <dd class="col-sm-9">@Model.LastName</dd>
+
+            <dt class="col-sm-3">E-posta</dt>
+            <dd class="col-sm-9">@Model.Email</dd>
+
+            <dt class="col-sm-3">Bölüm</dt>
+            <dd class="col-sm-9">@Model.Department</dd>
+
+            <dt class="col-sm-3">Doğum Tarihi</dt>
+            <dd class="col-sm-9">@Model.BirthDate?.ToString("yyyy-MM-dd")</dd>
+
+            <dt class="col-sm-3">Durum</dt>
+            <dd class="col-sm-9">@((Model.Status) ? "Aktif" : "Pasif")</dd>
+        </dl>
+
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Düzenle</a>
+        <a asp-action="Index" class="btn btn-secondary">Listeye Dön</a>
+    </div>
+</div>

@@ -23,13 +23,23 @@ namespace StudentAutomation.Application.MappingProfiles
         public GeneralMapping()
         {
 
+            // Create
             CreateMap<UserCreateDto, User>()
-    .ForMember(dest => dest.PasswordHash, opt => opt.Ignore())
-    .ForMember(dest => dest.PasswordSalt, opt => opt.Ignore());
+                .ForMember(d => d.PasswordHash, o => o.Ignore())
+                .ForMember(d => d.PasswordSalt, o => o.Ignore());
 
+            // Login/Register
             CreateMap<User, UserForLoginDto>().ReverseMap();
             CreateMap<User, UserForRegisterDto>().ReverseMap();
-            CreateMap<User, UserListDto>().ReverseMap();
+
+            // LIST DTO — FullName'i açıkça doldur
+            CreateMap<User, UserListDto>()
+                .ForMember(d => d.FullName, o => o.MapFrom(s =>
+                    ((s.FirstName ?? "").Trim()
+                     + (string.IsNullOrWhiteSpace(s.LastName) ? "" : " " + s.LastName.Trim()))
+                    .Trim()))
+                .ReverseMap() // ters map gerekli ise, FullName'in User'a geri yazılmasını istemiyorsanız kaldırın
+                ;
             CreateMap<User, UserUpdateDto>().ReverseMap();
             CreateMap<User, UserDto>().ReverseMap();
 
@@ -45,15 +55,20 @@ namespace StudentAutomation.Application.MappingProfiles
             // Student
             CreateMap<StudentCreateDto, Student>();
             CreateMap<StudentUpdateDto, Student>();
-            CreateMap<Student, StudentListDto>()
-                .ForMember(d => d.FirstName, m => m.MapFrom(s => s.User.FirstName))
-                .ForMember(d => d.LastName, m => m.MapFrom(s => s.User.LastName))
-                .ForMember(d => d.Email, m => m.MapFrom(s => s.User.Email));
-            CreateMap<Student, StudentDetailDto>()
-                .IncludeBase<Student, StudentListDto>();
-            CreateMap<Student, StudentMiniDto>()
-                .ForMember(d => d.FullName, m => m.MapFrom(s => s.User.FirstName + " " + s.User.LastName));
 
+            CreateMap<Student, StudentListDto>()
+                .ForMember(d => d.FirstName, m => m.MapFrom(s => s.User != null ? s.User.FirstName : null))
+                .ForMember(d => d.LastName, m => m.MapFrom(s => s.User != null ? s.User.LastName : null))
+                .ForMember(d => d.Email, m => m.MapFrom(s => s.User != null ? s.User.Email : null));
+
+            CreateMap<Student, StudentDetailDto>()
+                .IncludeBase<Student, StudentListDto>(); // base map önce tanımlı olmalı
+
+            CreateMap<Student, StudentMiniDto>()
+                .ForMember(d => d.FullName,
+                    m => m.MapFrom(s => s.User != null
+                        ? (s.User.FirstName + " " + s.User.LastName)
+                        : null));
             // Teacher
             CreateMap<TeacherCreateDto, Teacher>();
             CreateMap<TeacherUpdateDto, Teacher>();

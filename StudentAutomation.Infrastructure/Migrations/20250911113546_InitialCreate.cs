@@ -69,7 +69,7 @@ namespace StudentAutomation.Infrastructure.Migrations
                     user_id = table.Column<int>(type: "integer", nullable: false),
                     student_number = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: false),
                     department = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: true),
-                    birth_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    birth_date = table.Column<DateOnly>(type: "date", nullable: true),
                     status = table.Column<bool>(type: "boolean", nullable: false, defaultValue: true)
                 },
                 constraints: table =>
@@ -190,7 +190,7 @@ namespace StudentAutomation.Infrastructure.Migrations
                 {
                     student_id = table.Column<int>(type: "integer", nullable: false),
                     course_id = table.Column<int>(type: "integer", nullable: false),
-                    enrolled_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    enrolled_at = table.Column<DateOnly>(type: "date", nullable: true, defaultValueSql: "CURRENT_DATE")
                 },
                 constraints: table =>
                 {

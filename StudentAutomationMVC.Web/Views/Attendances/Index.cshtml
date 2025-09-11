@@ -1,0 +1,176 @@
+﻿@model List<StudentAutomationMVC.Web.Models.Attendances.AttendanceListDto>
+@using Microsoft.AspNetCore.Mvc.Rendering
+@{
+    ViewData["Title"] = "Yoklamalar";
+    var students = ViewBag.Students as List<SelectListItem> ?? new();
+    var courses = ViewBag.Courses as List<SelectListItem> ?? new();
+
+    string selectedStudent = Context.Request.Query["studentId"];
+    string selectedCourse = Context.Request.Query["courseId"];
+    string selectedDate = Context.Request.Query["date"];
+}
+
+<div class="d-flex align-items-center justify-content-between mb-3">
+    <h3 class="m-0">Yoklamalar</h3>
+    <div class="d-flex gap-2">
+        <a asp-action="Create" class="btn btn-primary">
+            <i class="bi bi-plus-lg"></i> Yeni Yoklama
+        </a>
+    </div>
+</div>
+
+@await Html.PartialAsync("~/Views/Shared/_Alerts.cshtml")
+
+<div class="card shadow-sm mb-3">
+    <div class="card-body">
+        <form method="get" class="row g-2 align-items-end">
+            <div class="col-md-4">
+                <label class="form-label">Öğrenci</label>
+                <select class="form-select" name="studentId">
+                    <option value="">Tümü</option>
+                    @foreach (var s in students)
+                    {
+                        <option value="@s.Value" selected="@(s.Value == selectedStudent ? "selected" : null)">@s.Text</option>
+                    }
+                </select>
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label">Ders</label>
+                <select class="form-select" name="courseId">
+                    <option value="">Tümü</option>
+                    @foreach (var c in courses)
+                    {
+                        <option value="@c.Value" selected="@(c.Value == selectedCourse ? "selected" : null)">@c.Text</option>
+                    }
+                </select>
+            </div>
+
+            <div class="col-md-2">
+                <label class="form-label">Tarih</label>
+                <input class="form-control" type="date" name="date" value="@selectedDate" />
+            </div>
+
+            <div class="col-md-2">
+                <button class="btn btn-outline-primary w-100" type="submit">
+                    <i class="bi bi-funnel"></i> Filtrele
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <div class="row g-2 align-items-center mb-3">
+            <div class="col-sm-6">
+                <input id="searchBox" class="form-control" placeholder="Ara: öğrenci, ders, not, durum..." />
+            </div>
+            <div class="col-auto">
+                <span class="text-muted small" id="rowCount"></span>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table align-middle" id="attTable">
+                <thead class="table-light">
+                    <tr>
+                        <th>Tarih</th>
+                        <th>Hafta</th>
+                        <th>Ders</th>
+                        <th>Öğrenci</th>
+                        <th>Durum</th>
+                        <th>Not</th>
+                        <th style="width:160px"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model?.Any() == true)
+                    {
+                        foreach (var a in Model)
+                        {
+                            <tr>
+                                <td>@a.Date.ToString("yyyy-MM-dd")</td>
+                                <td>@(a.Week?.ToString() ?? "-")</td>
+                                <td>@a.CourseCode — @a.CourseName</td>
+                                <td>@a.StudentFullName</td>
+                                <td>
+                                    @{
+                                        string badge = a.Status switch
+                                        {
+                                            StudentAutomationMVC.Web.Models.Attendances.AttendanceStatus.Present => "success",
+                                            StudentAutomationMVC.Web.Models.Attendances.AttendanceStatus.Absent => "danger",
+                                            StudentAutomationMVC.Web.Models.Attendances.AttendanceStatus.Excused => "warning",
+                                            _ => "secondary"
+                                        };
+                                        string text = a.Status switch
+                                        {
+                                            StudentAutomationMVC.Web.Models.Attendances.AttendanceStatus.Present => "Geldi",
+                                            StudentAutomationMVC.Web.Models.Attendances.AttendanceStatus.Absent => "Gelmedi",
+                                            StudentAutomationMVC.Web.Models.Attendances.AttendanceStatus.Excused => "İzinli",
+                                            _ => a.Status.ToString()
+                                        };
+                                    }
+                                    <span class="badge bg-@badge">@text</span>
+                                </td>
+                                <td class="text-truncate" style="max-width:260px">@a.Note</td>
+                                <td class="text-end">
+                                    <div class="btn-group">
+                                        <a asp-action="Details" asp-route-id="@a.Id" class="btn btn-outline-secondary btn-sm">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+                                        <a asp-action="Edit" asp-route-id="@a.Id" class="btn btn-outline-primary btn-sm">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                        <a asp-action="Delete" asp-route-id="@a.Id" class="btn btn-outline-danger btn-sm">
+                                            <i class="bi bi-trash"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="7" class="text-center text-muted py-4">
+                                Kayıt bulunamadı. Filtre seçerek arayabilirsiniz.
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        (function () {
+            const tb = document.getElementById('attTable').getElementsByTagName('tbody')[0];
+            const sb = document.getElementById('searchBox');
+            const rc = document.getElementById('rowCount');
+
+            function updateCount() {
+                const rows = tb.querySelectorAll('tr');
+                let visible = 0;
+                rows.forEach(r => { if (r.style.display !== 'none') visible++; });
+                rc.textContent = visible + " kayıt";
+            }
+
+            sb?.addEventListener('input', function () {
+                const q = (this.value || '').toLowerCase().trim();
+                const rows = tb.querySelectorAll('tr');
+
+                rows.forEach(row => {
+                    const text = row.innerText.toLowerCase();
+                    row.style.display = text.includes(q) ? '' : 'none';
+                });
+
+                updateCount();
+            });
+
+            updateCount();
+        })();
+    </script>
+}

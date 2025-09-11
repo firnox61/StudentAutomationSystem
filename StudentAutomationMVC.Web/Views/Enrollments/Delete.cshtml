@@ -1,0 +1,25 @@
+﻿@{
+    ViewData["Title"] = "Kayıt Sil";
+    var studentId = (int)ViewBag.StudentId;
+    var courseId = (int)ViewBag.CourseId;
+}
+
+<div class="d-flex align-items-center justify-content-between mb-3">
+    <h3 class="m-0">Kayıt Sil</h3>
+    <a asp-action="Index" asp-route-studentId="@studentId" class="btn btn-outline-secondary">Geri Dön</a>
+</div>
+
+@await Html.PartialAsync("~/Views/Shared/_Alerts.cshtml")
+
+<div class="alert alert-warning">
+    <strong>Uyarı:</strong> Öğrencinin bu dersteki kaydını silmek üzeresiniz.
+    <div class="mt-2">Öğrenci ID: <b>@studentId</b>, Ders ID: <b>@courseId</b></div>
+</div>
+
+<form asp-action="Delete" method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="studentId" value="@studentId" />
+    <input type="hidden" name="courseId" value="@courseId" />
+    <button type="submit" class="btn btn-danger">Evet, Sil</button>
+    <a asp-action="Index" asp-route-studentId="@studentId" class="btn btn-outline-secondary">Vazgeç</a>
+</form>

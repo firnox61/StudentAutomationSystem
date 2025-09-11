@@ -1,0 +1,117 @@
+﻿@model List<StudentAutomationMVC.Web.Models.Students.StudentListDto>
+@{
+    ViewData["Title"] = "Öğrenciler";
+}
+
+<div class="d-flex align-items-center justify-content-between mb-3">
+    <h3 class="m-0">Öğrenciler</h3>
+    <a asp-action="Create" class="btn btn-primary">
+        <i class="bi bi-plus-lg"></i> Yeni Öğrenci
+    </a>
+</div>
+
+@await Html.PartialAsync("~/Views/Shared/_Alerts.cshtml")
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <div class="row g-2 align-items-center mb-3">
+            <div class="col-sm-6">
+                <input id="searchBox" class="form-control" placeholder="Ara: ad, soyad, email, no, bölüm..." />
+            </div>
+            <div class="col-auto">
+                <span class="text-muted small" id="rowCount"></span>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table align-middle" id="studentsTable">
+                <thead class="table-light">
+                    <tr>
+                        <th>Ad Soyad</th>
+                        <th>Email</th>
+                        <th>Öğrenci No</th>
+                        <th>Bölüm</th>
+                        <th>Durum</th>
+                        <th style="width:160px"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model?.Any() == true)
+                    {
+                        foreach (var s in Model)
+                        {
+                            <tr>
+                                <td>@s.FirstName @s.LastName</td>
+                                <td><a href="mailto:@s.Email">@s.Email</a></td>
+                                <td>@s.StudentNumber</td>
+                                <td>@s.Department</td>
+                                <td>
+                                    @if (s.Status)
+                                    {
+                                        <span class="badge bg-success">Aktif</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-secondary">Pasif</span>
+                                    }
+                                </td>
+                                <td class="text-end">
+                                    <div class="btn-group">
+                                        <a asp-action="Details" asp-route-id="@s.Id" class="btn btn-outline-secondary btn-sm">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+                                        <a asp-action="Edit" asp-route-id="@s.Id" class="btn btn-outline-primary btn-sm">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                        <a asp-action="Delete" asp-route-id="@s.Id" class="btn btn-outline-danger btn-sm">
+                                            <i class="bi bi-trash"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="6" class="text-center text-muted py-4">
+                                Hiç kayıt yok.
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        (function () {
+            const tb = document.getElementById('studentsTable').getElementsByTagName('tbody')[0];
+            const sb = document.getElementById('searchBox');
+            const rc = document.getElementById('rowCount');
+
+            function updateCount() {
+                const rows = tb.querySelectorAll('tr');
+                let visible = 0;
+                rows.forEach(r => { if (r.style.display !== 'none') visible++; });
+                rc.textContent = visible + " kayıt";
+            }
+
+            sb?.addEventListener('input', function () {
+                const q = (this.value || '').toLowerCase().trim();
+                const rows = tb.querySelectorAll('tr');
+
+                rows.forEach(row => {
+                    const text = row.innerText.toLowerCase();
+                    row.style.display = text.includes(q) ? '' : 'none';
+                });
+
+                updateCount();
+            });
+
+            updateCount();
+        })();
+    </script>
+}

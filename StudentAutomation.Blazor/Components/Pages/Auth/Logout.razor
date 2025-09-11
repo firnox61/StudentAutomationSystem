@@ -1,0 +1,14 @@
+﻿@page "/auth/logout"
+@using StudentAutomation.Blazor.Auth
+@inject IJwtCookieAuthService AuthService
+@inject NavigationManager Nav
+
+<p>Çıkış yapılıyor...</p>
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        await AuthService.SignOutAsync();
+        Nav.NavigateTo("/", forceLoad: true);
+    }
+}

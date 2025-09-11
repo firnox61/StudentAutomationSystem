@@ -10,6 +10,7 @@ namespace StudentAutomation.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+   // [Authorize(Roles = "Admin,Teacher")]
     public class StudentFeedbacksController : ControllerBase
     {
         private readonly IStudentFeedbackService _service;
@@ -30,10 +31,13 @@ namespace StudentAutomation.WebAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] StudentFeedbackCreateDto dto, [FromQuery] int teacherId)
+        public async Task<IActionResult> Create([FromBody] StudentFeedbackCreateDto dto, CancellationToken ct)
         {
-            var result = await _service.CreateAsync(teacherId, dto);
-            return result.Success ? Ok(result.Message) : BadRequest(result.Message);
+            if (dto is null)
+                return BadRequest("Geçersiz istek gövdesi.");
+
+            var result = await _service.CreateAsync(dto);
+            return result.Success ? Ok(result) : BadRequest(result);
         }
 
         [HttpPut]

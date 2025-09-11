@@ -1,0 +1,41 @@
+﻿/* app-shell.css */
+.app-wrap {
+    min-height: calc(100vh - 56px);
+}
+
+/* Sol panel genişliği */
+.app-sidebar {
+    width: 260px;
+    background-color: var(--bs-body-bg);
+}
+
+/* İçerik alanı artık temaya göre renk alacak */
+.app-main {
+    background-color: var(--bs-body-bg);
+}
+
+/* List group temaya uyumlu */
+.list-group-item {
+    background-color: var(--bs-body-bg);
+    color: var(--bs-body-color);
+    border-color: var(--bs-border-color);
+}
+
+    .list-group-item:hover {
+        background-color: var(--bs-tertiary-bg);
+    }
+
+    .list-group-item.active {
+        background-color: var(--bs-primary);
+        border-color: var(--bs-primary);
+        color: #fff;
+    }
+
+/* Kenar çizgileri temaya uyumlu kalsın */
+.app-sidebar.border-end {
+    border-right-color: var(--bs-border-color) !important;
+}
+
+footer.border-top {
+    border-top-color: var(--bs-border-color) !important;
+}

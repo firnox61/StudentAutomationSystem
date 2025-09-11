@@ -1,0 +1,47 @@
+﻿@model StudentAutomationMVC.Web.Models.Teachers.TeacherDetailDto
+@{
+    ViewData["Title"] = "Öğretmen Detayı";
+}
+
+<div class="d-flex align-items-center justify-content-between mb-3">
+    <h3 class="m-0">Öğretmen Detayı</h3>
+    <div>
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary me-2">
+            <i class="bi bi-pencil"></i> Düzenle
+        </a>
+        <a asp-action="Index" class="btn btn-outline-secondary">Listeye Dön</a>
+    </div>
+</div>
+
+@await Html.PartialAsync("~/Views/Shared/_Alerts.cshtml")
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Ad Soyad</dt>
+            <dd class="col-sm-9">@Model.FirstName @Model.LastName</dd>
+
+            <dt class="col-sm-3">Email</dt>
+            <dd class="col-sm-9"><a href="mailto:@Model.Email">@Model.Email</a></dd>
+
+            <dt class="col-sm-3">Unvan</dt>
+            <dd class="col-sm-9">@Model.Title</dd>
+
+            <dt class="col-sm-3">Bölüm</dt>
+            <dd class="col-sm-9">@Model.Department</dd>
+
+            <dt class="col-sm-3">Durum</dt>
+            <dd class="col-sm-9">
+                @if (Model.Status)
+                {
+                    <span class="badge bg-success">Aktif</span>
+                }
+                else
+                {
+
+                    <span class="badge bg-secondary">Pasif</span>
+                }
+            </dd>
+        </dl>
+    </div>
+</div>

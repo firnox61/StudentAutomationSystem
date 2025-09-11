@@ -35,7 +35,7 @@ namespace StudentAutomation.Application.Services.Managers
             var accessToken = _tokenHelper.CreateToken(user, claims.Data);
             return new SuccessDataResult<AccessToken>(accessToken);
         }
-        [TransactionScopeAspect]
+      //  [TransactionScopeAspect]
         public async Task<IDataResult<User>> LoginAsync(UserForLoginDto loginDto)
         {
             var userResult = await _userService.GetByEmailAsync(loginDto.Email);
@@ -55,8 +55,8 @@ namespace StudentAutomation.Application.Services.Managers
 
             return new SuccessDataResult<User>(user, "Giriş başarılı");
         }
-        [TransactionScopeAspect]
-        [CacheRemoveAspect("IUserService.Get*")]
+      //  [TransactionScopeAspect]
+      //  [CacheRemoveAspect("IUserService.Get*")]
         public async Task<IDataResult<User>> RegisterAsync(UserForRegisterDto registerDto, string password)
         {
             byte[] passwordHash, passwordSalt;

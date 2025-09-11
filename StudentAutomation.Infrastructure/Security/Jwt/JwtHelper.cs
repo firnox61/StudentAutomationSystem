@@ -61,6 +61,10 @@ namespace StudentAutomation.Infrastructure.Security.Jwt
             claims.AddName($"{user.FirstName} {user.LastName}");//para işareti birleştiriyor
             claims.AddRoles(operationClaims.Select(c => c.Name).ToArray());
 
+            // 2) JWT standardı için "role" claim'ini ayrıca ekle
+           /* foreach (var r in operationClaims.Select(c => c.Name))
+                claims.Add(new Claim("role", r));*/
+
             return claims;
         }
     }

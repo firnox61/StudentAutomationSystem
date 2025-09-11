@@ -1,0 +1,51 @@
+﻿@model StudentAutomationMVC.Web.Models.Feedbacks.StudentFeedbackListDto
+@{
+    ViewData["Title"] = "Geri Bildirim Sil";
+}
+
+<div class="d-flex align-items-center justify-content-between mb-3">
+    <h3 class="m-0 text-danger">Geri Bildirim Sil</h3>
+    <a asp-action="Index" asp-route-courseId="@Model.CourseId" asp-route-studentId="@Model.StudentId" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left"></i> Listeye Dön
+    </a>
+</div>
+
+@await Html.PartialAsync("~/Views/Shared/_Alerts.cshtml")
+
+<div class="alert alert-warning">
+    <i class="bi bi-exclamation-triangle"></i>
+    Bu kaydı silmek istediğinize emin misiniz?
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Id</dt>
+            <dd class="col-sm-9">@Model.Id</dd>
+
+            <dt class="col-sm-3">Kurs</dt>
+            <dd class="col-sm-9">@Model.CourseId</dd>
+
+            <dt class="col-sm-3">Öğrenci</dt>
+            <dd class="col-sm-9">@Model.StudentId</dd>
+
+            <dt class="col-sm-3">Öğretmen</dt>
+            <dd class="col-sm-9">@Model.TeacherFullName</dd>
+
+            <dt class="col-sm-3">Yorum</dt>
+            <dd class="col-sm-9">@Model.Comment</dd>
+        </dl>
+
+        <form asp-action="Delete" method="post">
+            <input type="hidden" name="id" value="@Model.Id" />
+            <div class="d-flex gap-2">
+                <button class="btn btn-danger" type="submit">
+                    <i class="bi bi-trash"></i> Evet, Sil
+                </button>
+                <a asp-action="Index" asp-route-courseId="@Model.CourseId" asp-route-studentId="@Model.StudentId" class="btn btn-outline-secondary">
+                    İptal
+                </a>
+            </div>
+        </form>
+    </div>
+</div>

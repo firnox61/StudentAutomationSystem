@@ -9,6 +9,7 @@ namespace StudentAutomation.Application.Repositories
 {
     public interface IGradeDal : IEntityRepository<Grade>
     {
+        Task<List<Grade>> GetAllDetailAsync();
         Task<Grade?> GetByIdDetailAsync(int id);              // Course + Student.User
         Task<Grade?> GetByKeysAsync(int studentId, int courseId, GradeType type);
         Task<List<Grade>> GetByStudentAsync(int studentId, int? courseId);

@@ -92,29 +92,39 @@ namespace StudentAutomation.Infrastructure.Persistence.Context
                     e.HasIndex(x => new { x.UserId, x.OperationClaimId }).IsUnique();
                 });
 
-                // =========================
-                // STUDENT
-                // =========================
-                modelBuilder.Entity<Student>(e =>
-                {
-                    e.HasKey(x => x.Id);
+            // =========================
+            // STUDENT
+            // =========================
+            modelBuilder.Entity<Student>(e =>
+            {
+                e.HasKey(x => x.Id);
 
-                    e.Property(x => x.StudentNumber).HasMaxLength(32).IsRequired();
-                    e.HasIndex(x => x.StudentNumber).IsUnique();
+                e.Property(x => x.StudentNumber)
+                 .HasMaxLength(32)
+                 .IsRequired();
 
-                    e.Property(x => x.Department).HasMaxLength(128);
-                    e.Property(x => x.Status).HasDefaultValue(true);
+                e.HasIndex(x => x.StudentNumber).IsUnique();
 
-                    e.HasOne(x => x.User)
-                     .WithMany() // User -> (0..1) Student yönlü ilişkiyi tek-yönlü tutuyoruz
-                     .HasForeignKey(x => x.UserId)
-                     .OnDelete(DeleteBehavior.Restrict);
-                });
+                e.Property(x => x.Department)
+                 .HasMaxLength(128);
 
-                // =========================
-                // TEACHER
-                // =========================
-                modelBuilder.Entity<Teacher>(e =>
+                e.Property(x => x.Status)
+                 .HasDefaultValue(true);
+
+                // Doğum tarihi: saf tarih (time zone yok)
+                e.Property(x => x.BirthDate)
+                 .HasColumnType("date"); // <-- timestamptz değil
+
+                e.HasOne(x => x.User)
+                 .WithMany() // User -> Student tek yön
+                 .HasForeignKey(x => x.UserId)
+                 .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            // =========================
+            // TEACHER
+            // =========================
+            modelBuilder.Entity<Teacher>(e =>
                 {
                     e.HasKey(x => x.Id);
 
@@ -148,27 +158,31 @@ namespace StudentAutomation.Infrastructure.Persistence.Context
                      .OnDelete(DeleteBehavior.SetNull);
                 });
 
-                // =========================
-                // ENROLLMENT (Many-to-Many with payload)
-                // =========================
-                modelBuilder.Entity<Enrollment>(e =>
-                {
-                    // Composite PK
-                    e.HasKey(x => new { x.StudentId, x.CourseId });
+            // =========================
+            // ENROLLMENT (Many-to-Many with payload)
+            // =========================
+            modelBuilder.Entity<Enrollment>(e =>
+            {
+                // Composite PK
+                e.HasKey(x => new { x.StudentId, x.CourseId });
 
-                    e.HasOne(x => x.Student)
-                     .WithMany(s => s.Enrollments)
-                     .HasForeignKey(x => x.StudentId)
-                     .OnDelete(DeleteBehavior.Cascade);
+                e.HasOne(x => x.Student)
+                 .WithMany(s => s.Enrollments)
+                 .HasForeignKey(x => x.StudentId)
+                 .OnDelete(DeleteBehavior.Cascade);
 
-                    e.HasOne(x => x.Course)
-                     .WithMany(c => c.Enrollments)
-                     .HasForeignKey(x => x.CourseId)
-                     .OnDelete(DeleteBehavior.Cascade);
+                e.HasOne(x => x.Course)
+                 .WithMany(c => c.Enrollments)
+                 .HasForeignKey(x => x.CourseId)
+                 .OnDelete(DeleteBehavior.Cascade);
 
-                    e.Property(x => x.EnrolledAt)
-                     .HasColumnType("timestamp with time zone"); // Npgsql önerisi
-                });
+                // ⬇⬇⬇ BURAYI DEĞİŞTİR
+                e.Property(x => x.EnrolledAt)
+                 .HasColumnType("date")          // PostgreSQL'de DateOnly için doğru tip
+                 .IsRequired(false)              // EnrolledAt nullable ise
+                 .HasDefaultValueSql("CURRENT_DATE"); // (opsiyonel) DB default'u bugün
+            });
+
 
             // =========================
             // GRADE

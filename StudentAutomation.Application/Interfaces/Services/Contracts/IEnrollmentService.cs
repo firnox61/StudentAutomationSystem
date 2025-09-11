@@ -11,7 +11,7 @@ namespace StudentAutomation.Application.Interfaces.Services.Contracts
 {
     public interface IEnrollmentService
     {
-        Task<IResult> EnrollAsync(int studentId, int courseId, DateTime? enrolledAt = null);
+        Task<IResult> EnrollAsync(int studentId, int courseId, DateOnly? enrolledAt = null);
         Task<IResult> UnenrollAsync(int studentId, int courseId);
         Task<IDataResult<List<CourseMiniDto>>> GetCoursesOfStudentAsync(int studentId);
         Task<IDataResult<List<StudentMiniDto>>> GetStudentsOfCourseAsync(int courseId);

@@ -1,0 +1,127 @@
+﻿@model List<StudentAutomationMVC.Web.Models.Feedbacks.StudentFeedbackListDto>
+@{
+    ViewData["Title"] = "Geri Bildirimler";
+    var courseId = (int?)ViewBag.CourseId;
+    var studentId = (int?)ViewBag.StudentId;
+}
+
+<div class="d-flex align-items-center justify-content-between mb-3">
+    <h3 class="m-0">Geri Bildirimler</h3>
+
+    <div class="d-flex gap-2">
+        <form method="get" class="d-flex gap-2">
+            <input type="number" class="form-control" name="courseId" placeholder="Kurs Id"
+                   value="@(courseId?.ToString() ?? "")" />
+            <input type="number" class="form-control" name="studentId" placeholder="Öğrenci Id"
+                   value="@(studentId?.ToString() ?? "")" />
+            <button class="btn btn-outline-secondary" type="submit">
+                <i class="bi bi-funnel"></i> Filtrele
+            </button>
+        </form>
+
+        <a asp-action="Create" asp-route-courseId="@courseId" asp-route-studentId="@studentId" class="btn btn-primary">
+            <i class="bi bi-plus-lg"></i> Yeni Geri Bildirim
+        </a>
+    </div>
+</div>
+
+@await Html.PartialAsync("~/Views/Shared/_Alerts.cshtml")
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <div class="row g-2 align-items-center mb-3">
+            <div class="col-sm-6">
+                <input id="searchBox" class="form-control" placeholder="Ara: öğretmen, yorum, kurs/öğrenci id..." />
+            </div>
+            <div class="col-auto">
+                <span class="text-muted small" id="rowCount"></span>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table align-middle" id="fbTable">
+                <thead class="table-light">
+                    <tr>
+                        <th>#</th>
+                        <th>Kurs</th>
+                        <th>Öğrenci</th>
+                        <th>Öğretmen</th>
+                        <th>Yorum</th>
+                        <th>Oluşturma</th>
+                        <th>Güncelleme</th>
+                        <th style="width:180px"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model?.Any() == true)
+                    {
+                        foreach (var f in Model)
+                        {
+                            <tr>
+                                <td>@f.Id</td>
+                                <td>@f.CourseId</td>
+                                <td>@f.StudentId</td>
+                                <td>@f.TeacherFullName</td>
+                                <td class="text-wrap" style="max-width:420px">@f.Comment</td>
+                                <td>@f.CreatedAt.ToLocalTime().ToString("g")</td>
+                                <td>@(f.UpdatedAt?.ToLocalTime().ToString("g") ?? "-")</td>
+                                <td class="text-end">
+                                    <div class="btn-group">
+                                        <a asp-action="Details" asp-route-id="@f.Id" class="btn btn-outline-secondary btn-sm" title="Detay">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+                                        <a asp-action="Edit" asp-route-id="@f.Id" class="btn btn-outline-primary btn-sm" title="Düzenle">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                        <a asp-action="Delete" asp-route-id="@f.Id" class="btn btn-outline-danger btn-sm" title="Sil">
+                                            <i class="bi bi-trash"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="8" class="text-center text-muted py-4">
+                                Kayıt bulunamadı. Filtreyi kontrol edin (courseId veya studentId).
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        (function () {
+            const tb = document.getElementById('fbTable').getElementsByTagName('tbody')[0];
+            const sb = document.getElementById('searchBox');
+            const rc = document.getElementById('rowCount');
+
+            function updateCount() {
+                const rows = tb.querySelectorAll('tr');
+                let visible = 0;
+                rows.forEach(r => { if (r.style.display !== 'none') visible++; });
+                rc.textContent = visible + " kayıt";
+            }
+
+            sb?.addEventListener('input', function () {
+                const q = (this.value || '').toLowerCase().trim();
+                const rows = tb.querySelectorAll('tr');
+
+                rows.forEach(row => {
+                    const text = row.innerText.toLowerCase();
+                    row.style.display = text.includes(q) ? '' : 'none';
+                });
+
+                updateCount();
+            });
+
+            updateCount();
+        })();
+    </script>
+}

@@ -11,7 +11,7 @@ namespace StudentAutomation.Application.DTOs.Students
         public int UserId { get; set; }
         public string StudentNumber { get; set; } = default!;
         public string? Department { get; set; }
-        public DateTime? BirthDate { get; set; }
+        public DateOnly? BirthDate { get; set; }
         public bool Status { get; set; } = true;
     }
     public class StudentUpdateDto : StudentCreateDto
@@ -26,7 +26,7 @@ namespace StudentAutomation.Application.DTOs.Students
     }
     public class StudentDetailDto : StudentListDto
     {
-        public DateTime? BirthDate { get; set; }
+        public DateOnly? BirthDate { get; set; }
     }
     public class StudentListDto
     {

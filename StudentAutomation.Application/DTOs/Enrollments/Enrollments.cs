@@ -10,6 +10,6 @@ namespace StudentAutomation.Application.DTOs.Enrollments
     {
         public int StudentId { get; set; }
         public int CourseId { get; set; }
-        public DateTime? EnrolledAt { get; set; }
+        public DateOnly? EnrolledAt { get; set; }
     }
 }

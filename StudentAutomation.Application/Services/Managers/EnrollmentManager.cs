@@ -25,7 +25,7 @@ namespace StudentAutomation.Application.Services.Managers
             _courseDal = courseDal;
         }
 
-        public async Task<IResult> EnrollAsync(int studentId, int courseId, DateTime? enrolledAt = null)
+        public async Task<IResult> EnrollAsync(int studentId, int courseId, DateOnly? enrolledAt = null)
         {
             var student = await _studentDal.GetByIdAsync(studentId);
             if (student == null) return new ErrorResult("Öğrenci bulunamadı.");
@@ -37,15 +37,18 @@ namespace StudentAutomation.Application.Services.Managers
             var exist = await _enrollmentDal.GetAsync(studentId, courseId);
             if (exist != null) return new ErrorResult("Öğrenci zaten bu derse kayıtlı.");
 
+            var date = enrolledAt ?? DateOnly.FromDateTime(DateTime.Today); // ← varsayılan bugün
+
             await _enrollmentDal.AddAsync(new Enrollment
             {
                 StudentId = studentId,
                 CourseId = courseId,
-                EnrolledAt = enrolledAt ?? DateTime.UtcNow
+                EnrolledAt = date
             });
 
             return new SuccessResult("Öğrenci derse kaydedildi.");
         }
+
 
         public async Task<IResult> UnenrollAsync(int studentId, int courseId)
         {

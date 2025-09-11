@@ -1,4 +1,5 @@
 ﻿using StudentAutomation.Blazor.Models;
+using StudentAutomation.Blazor.Models.Auth;
 
 namespace StudentAutomation.Blazor.Services
 {
@@ -14,8 +15,8 @@ namespace StudentAutomation.Blazor.Services
         Task<IReadOnlyList<CourseListDto>> GetCoursesAsync();
         Task<CourseDetailDto?> GetCourseAsync(int id);
 
-
-
+        Task<AccessTokenDto> LoginAsync(string email, string password, CancellationToken ct = default);
+        Task<bool> RegisterAsync(RegisterRequest req, CancellationToken ct = default);
         // --- Dashboard counts ---
         Task<int> GetStudentCountAsync();
         Task<int> GetTeacherCountAsync();
