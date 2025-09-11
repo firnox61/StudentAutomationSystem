@@ -290,64 +290,11 @@ dotnet run
 
 6. **Swagger UI'ya erişin**
 ```
-https://localhost:7001/swagger
+http://localhost:5180/swagger/index.html
 ```
+ **Web tarafına erişin**
+http://localhost:5283/
 
-## 📖 Kullanım
-
-### Authentication
-
-Sisteme erişim için önce authentication endpoint'ini kullanarak token almalısınız:
-
-```bash
-POST /api/auth/login
-{
-  "email": "admin@example.com",
-  "password": "password123"
-}
-```
-
-Dönen token'ı Authorization header'ında kullanın:
-```bash
-Authorization: Bearer {your-jwt-token}
-```
-
-### Temel API Kullanımı
-
-#### Öğrenci Ekleme
-```bash
-POST /api/students
-{
-  "firstName": "Ahmet",
-  "lastName": "Yılmaz",
-  "email": "ahmet.yilmaz@email.com",
-  "phoneNumber": "05551234567",
-  "dateOfBirth": "2000-01-15"
-}
-```
-
-#### Ders Oluşturma  
-```bash
-POST /api/courses
-{
-  "courseName": "Matematik",
-  "courseCode": "MAT101",
-  "credits": 4,
-  "teacherId": 1
-}
-```
-
-#### Not Girişi
-```bash
-POST /api/grades
-{
-  "studentId": 1,
-  "courseId": 1,
-  "midtermGrade": 85.5,
-  "finalGrade": 92.0,
-  "letterGrade": "AA"
-}
-```
 
 ## 📚 API Dokümantasyonu
 
@@ -448,10 +395,10 @@ Bu proje MIT lisansı altında lisanslanmıştır. Detaylar için [LICENSE](LICE
 
 ## 📞 İletişim
 
-- **Geliştirici**: [Your Name]
-- **Email**: [your.email@example.com]
-- **LinkedIn**: [Your LinkedIn Profile]
-- **GitHub**: [Your GitHub Profile]
+- **Geliştirici**: [İsmail Enes Eroğlu]
+- **Email**: [ismaileneseroglu@gmail.com]
+- **LinkedIn**: [https://www.linkedin.com/in/ismail-enes-ero%C4%9Flu-4381a51ba/]
+- **GitHub**: [https://github.com/firnox61]
 
 ---
 
